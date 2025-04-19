@@ -16,5 +16,6 @@ dependencies = [
     "langchainhub>=0.1.21",
     "langgraph>=0.3.28",
     "requests>=2.32.3",
+    "spacy>=3.8.5",
     "transformers[sentencepiece]>=4.51.2",
 ]
