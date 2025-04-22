@@ -32,17 +32,19 @@ export const useChatStore = defineStore("chat", {
             }
         },
 
-        async saveUserMessage(newMessage: string) {
+        async assistantTrigger(newMessage: string) {
+            console.log("SAVE_USER_MESSAGE WAS CALLED");
             this.loading = true;
             try {
                 // TODO: UPDATE
                 const headers = {};
-                const response = await axios.get(
-                    `${API_ROUTE}/api/larutadelnico`,
-                    {
-                        headers,
-                    }
-                );
+                const url = `${API_ROUTE}/api/larutadelnico`;
+                const data = {
+                    message: newMessage,
+                };
+                const response = await axios.post(url, data, {
+                    headers,
+                });
 
                 this.messages = response.data.map((msg: any) => ({
                     ...msg,

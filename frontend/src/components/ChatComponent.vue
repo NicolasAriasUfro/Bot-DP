@@ -26,7 +26,7 @@ function handleSendMessage(msg: string) {
     const chatMessage = { message: msg, fromUser: true };
     chat.addMessage(chatMessage);
     chat.addBotLoadingMessage();
-    chat.saveUserMessage(msg);
+    chat.assistantTrigger(msg);
 }
 
 // TODO: UPDATE THIS

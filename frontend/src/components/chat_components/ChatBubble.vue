@@ -17,6 +17,7 @@ const bubbleClasses = computed(() =>
 
 <template>
     <div
+        data-testid="chat-bubble"
         class="flex items-start gap-2 m-2"
         :class="{ 'self-end': fromUser, 'self-start': !fromUser }"
     >

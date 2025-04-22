@@ -4,6 +4,7 @@ import { FwbSpinner } from "flowbite-vue";
 
 <template>
     <nav
+        data-testid="navbar"
         class="flex bg-background p-4 min-h-[64px] h-20 justify-center items-center"
     >
         <button
