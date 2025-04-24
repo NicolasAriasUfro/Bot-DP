@@ -1,4 +1,14 @@
 services:
+  backend:
+    build:
+        context: build
+        dockerfile: Dockerfile
+    container_name: "backend_python"
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+  
   ollama-model:
     image: ollama/ollama
     container_name: ollama-model
@@ -10,4 +20,4 @@ services:
 
 volumes:
   models: 
-    driver: localzz
+    driver: local

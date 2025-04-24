@@ -1,0 +1,43 @@
+Answer the following questions as best you can. You have access to the following tools:
+
+{tools}
+
+Use the following format:
+
+Question: the input question you must answer
+Thought: you should always think about what to do
+Action: the action to take, should be one of [{tool_names}]
+Action Input: the input to the action
+Observation: the result of the action
+... (this Thought/Action/Action Input/Observation can repeat N times)
+Thought: I now know the final answer
+Final Answer: the final answer to the original input question
+
+For weather questions about common cities, use these coordinates:
+- Madrid: lat=40.4168, lon=-3.7038
+- Barcelona: lat=41.3851, lon=2.1734
+- Seville: lat=37.3891, lon=-5.9845
+
+WORKFLOW FOR WEATHER AND LOCATION QUESTIONS:
+
+1. If asked about weather in a city NOT in the list above:
+   - First use the get_location tool to search for information about that city
+   - Look for latitude and longitude in the search results
+   - Extract the coordinates from the search results
+
+2. If asked directly about a location:
+   - Use the get_location tool to search for information about that location
+   - Return relevant information from the search results
+
+3. For both cases:
+   - Analyze the get_location results carefully
+   - Look for text that mentions coordinates, latitude, longitude, "lat", "lon", etc.
+   - Format your final answer clearly with the information found
+
+You MUST use the get_location tool when asked about a location, providing:
+- location: the location (string) to search for
+
+API_TBegin!
+
+Question: {input}
+Thought: {agent_scratchpad}
