@@ -18,9 +18,7 @@ class NoticeAgent:
       
    def get_notices(self) -> dict:
       """
-      get news from the api.
-         the response is expected to be in json format, and the unction returns the data if the request is successful.
-      if the request fails, an exception is raised with an error message.
+      get latest news from the noticeapi.
          
          example:
             get_notices()
@@ -28,7 +26,7 @@ class NoticeAgent:
          returns:
             dict: the data for the notice. 
       """
-      url = f"https://api.apitube.io/v1/news/everything?api_key={TUBE_API_KEY}&source.country.code={SOURCE_CONTRY_CODE}"
+      url = f"https://api.apitube.io/v1/news/everything?api_key={TUBE_API_KEY}&source.country.code={SOURCE_CONTRY_CODE}&limit=2"
       data = requests.get(url).json()
       if data.get("error") is None:
          return data
@@ -51,15 +49,7 @@ class NoticeAgent:
             name="get_notices",
             func=self.get_notices,
             description="""
-            get news from the api.
-            the response is expected to be in json format, and the function returns the data if the request is successful.
-            if the request fails, an exception is raised with an error message.
-            
-            example:
-               get_notices()
-            
-            returns:
-               dict: the data for the notice.
+            get the latest news from the notice api.
             """,
          )
       ]

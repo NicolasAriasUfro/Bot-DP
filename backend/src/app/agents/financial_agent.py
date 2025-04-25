@@ -4,6 +4,7 @@ from langchain.tools import StructuredTool
 from langchain_ollama.llms import OllamaLLM
 from app.utils.load_prompt import load_prompt_from_file
 from app.config.config import OLLAMA_URL, OLLAMA_MODEL, FINANCIAL_PROMPT
+import json 
 import requests
 
 class FinancialAgent:
@@ -11,7 +12,7 @@ class FinancialAgent:
       self.llm = OllamaLLM(
          model=OLLAMA_MODEL, 
          base_url=OLLAMA_URL,
-         temperature=0,
+         temperature=0, 
       )
       self.template = load_prompt_from_file(FINANCIAL_PROMPT)
       self.agent_executor = self.__finalcial_agent()
@@ -34,12 +35,20 @@ class FinancialAgent:
          Returns:
             dict: The data for the indicator.
       """
-      url = f"https://mindicador.cl/api/{indicator}"
-      data = requests.get(url).json()
-      if data.get("error") is None:
-         return data
-      else:
-         raise Exception(f"Error fetching indicator {indicator}: {data['message']}")  
+      try:
+            
+         url = f"https://mindicador.cl/api/{indicator}"
+         data = requests.get(url).json()
+         if data.get("error") is None:
+            return data
+         else:
+            raise Exception(f"Error fetching indicator {indicator}: {data['message']}") 
+      except requests.exceptions.RequestException as e:
+         raise Exception(f"Error fetching indicator {indicator}: {str(e)}")
+      except json.JSONDecodeError as e:
+         raise Exception(f"Error parsing JSON response for indicator {indicator}: {str(e)}")
+      except Exception as e:
+         raise Exception(f"An unexpected error occurred: {str(e)}")   
    
    def __finalcial_agent(self) -> AgentExecutor:
       """
@@ -94,5 +103,6 @@ class FinancialAgent:
       return AgentExecutor(
          agent=financial_agent, 
          tools=tools_for_agent, 
+         handle_parsing_errors=True,
          verbose=True,
       )

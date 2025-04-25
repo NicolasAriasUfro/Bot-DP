@@ -52,7 +52,7 @@ class AssistantService:
    def query_financial(self, user_question):
       print(f'{user_question}')
       try:
-         self.logger.info(f'Consulta financiera: {user_question}')
+         self.logger.log(f'Consulta financiera: {user_question}')
          # Primer agente - obtiene los datos financieros
          financial_result = self.financial_agent.agent_executor.invoke(
                input={"input": user_question}
