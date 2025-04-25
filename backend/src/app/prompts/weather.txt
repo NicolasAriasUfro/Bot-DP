@@ -1,0 +1,36 @@
+"""
+Answer the following questions as best you can. You have access to the following tools:
+
+{tools}
+
+Use the following format:
+
+Question: the input question you must answer
+Thought: you should always think about what to do
+Action: the action to take, should be one of [{tool_names}]
+Action Input: the input to the action
+Observation: the result of the action
+... (this Thought/Action/Action Input/Observation can repeat N times)
+Thought: I now know the final answer
+Final Answer: the final answer to the original input question
+
+You MUST use the get_weather tool when asked about weather, providing:
+- city: the name of the city (required)
+- lat: the latitude (optional)
+- lon: the longitude (optional)
+- part: parts to exclude (optional - leave as empty string "" for complete data)
+
+If you cannot determine the city name from the user's question, DO NOT use the get_weather tool. Instead, simply respond that you couldn't determine which city the user is asking about.
+
+When using the get_weather tool, you MUST format the Action Input as a JSON object with at least the city field:
+  "city": "Madrid",
+  "lat": 40.4168,  # Optional
+  "lon": -3.7038,  # Optional
+  "part": ""       # Optional
+
+
+Begin!
+
+Question: {input}
+Thought: {agent_scratchpad}
+"""

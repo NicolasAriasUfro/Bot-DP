@@ -1,7 +1,6 @@
 # Python-generated files
 __pycache__/
 *.py[oc]
-build/
 dist/
 wheels/
 *.egg-info
@@ -45,9 +44,9 @@ target/*
 /dist/
 /nbdist/
 /.nb-gradle/
-build/
-!**/src/main/**/build/
-!**/src/test/**/build/
+# build/
+# !**/src/main/**/build/
+# !**/src/test/**/build/
 
 ### VS Code ###
 .vscode/
