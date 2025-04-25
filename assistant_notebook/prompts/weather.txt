@@ -28,6 +28,8 @@ When using the get_weather tool, you MUST format the Action Input as a JSON obje
   "lon": -3.7038,  # Optional
   "part": ""       # Optional
 
+IMPORTANT
+don't use the country in the tool, only the city
 
 Begin!
 

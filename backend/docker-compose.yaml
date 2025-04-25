@@ -8,7 +8,10 @@ services:
       - "8888:8080"
     volumes:
       - .:/app
-  
+    depends_on:
+      ollama-model:
+        condition: service_healthy
+
   ollama-model:
     image: ollama/ollama
     container_name: ollama-model
@@ -17,6 +20,28 @@ services:
       - "11434:11434"
     volumes:
       - ./models:/models
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/version"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 8s
+
+    # Servicio de inicialización para descargar el modelo
+  ollama-init:
+    image: curlimages/curl:latest
+    depends_on:
+      ollama-model:
+        condition: service_healthy
+    restart: "no"
+    command: >
+      sh -c "
+        echo 'Esperando que Ollama esté listo...'
+        sleep 5
+        echo 'Descargando modelo ollama3...'
+        curl -X POST http://ollama-model:11434/api/pull -d '{\"model\":\"llama3\"}' &&
+        echo 'Modelo descargado correctamente'
+
 
 volumes:
   models: 
