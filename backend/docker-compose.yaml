@@ -1,11 +1,11 @@
 services:
   backend:
     build:
-        context: build
-        dockerfile: Dockerfile
+        context: .
+        dockerfile: build/Dockerfile
     container_name: "backend_python"
     ports:
-      - "8000:8000"
+      - "8888:8080"
     volumes:
       - .:/app
   

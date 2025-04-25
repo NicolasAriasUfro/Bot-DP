@@ -18,6 +18,7 @@ class NlpService:
       Returns:
          str: The category of the query (clima, dolar, uf, noticias, saludo, other)
       """
+      print(f"Classifying query: {query}")
       categories = ['clima', 'dolar', 'uf', 'noticias', 'saludo']
       result = self.classifier(query, candidate_labels=categories)
       
