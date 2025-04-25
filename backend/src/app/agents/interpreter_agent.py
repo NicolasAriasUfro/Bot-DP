@@ -2,7 +2,7 @@ from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_ollama.llms import OllamaLLM
 from app.utils.load_prompt import load_prompt_from_file
-from app.config.config import OLLAMA_URL, OLLAMA_MODEL
+from app.config.config import OLLAMA_URL, OLLAMA_MODEL, INTERPRETER_PROMPT
 
 class InterpreterAgent:
    def __init__(self):
@@ -11,7 +11,7 @@ class InterpreterAgent:
          base_url=OLLAMA_URL,
          temperature=0,
       )
-      self.template = load_prompt_from_file("src/app/prompts/interpreter.txt")
+      self.template = load_prompt_from_file(INTERPRETER_PROMPT)
       self.chain = self.get_interpreter_agent()
       
    def get_interpreter_agent(self):

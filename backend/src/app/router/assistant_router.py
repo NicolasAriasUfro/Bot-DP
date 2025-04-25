@@ -17,7 +17,7 @@ def query():
    """
    Endpoint to handle user queries.
    """
-   response = assistant_facade_service.determinate_flow(query="¿Como está el clima hoy?")
+   response = assistant_facade_service.determinate_flow(query="¿a cuanto esta el dolar?")
    
    return { 
       "response": response

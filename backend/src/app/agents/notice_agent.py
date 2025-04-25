@@ -3,7 +3,7 @@ from langchain_ollama.llms import OllamaLLM
 from langchain.tools import StructuredTool
 from langchain.agents import (create_react_agent, AgentExecutor)
 from app.utils.load_prompt import load_prompt_from_file
-from app.config.config import SOURCE_CONTRY_CODE, OLLAMA_MODEL, OLLAMA_URL, TUBE_API_KEY
+from app.config.config import SOURCE_CONTRY_CODE, OLLAMA_MODEL, OLLAMA_URL, TUBE_API_KEY, NOTICE_PROMPT
 import requests
 
 class NoticeAgent:
@@ -13,7 +13,7 @@ class NoticeAgent:
          base_url=OLLAMA_URL,
          temperature=0,
       )
-      self.template = load_prompt_from_file("src/app/prompts/notice.txt")
+      self.template = load_prompt_from_file(NOTICE_PROMPT)
       self.agent_executor = self.__notice_agent()
       
    def get_notices(self) -> dict:

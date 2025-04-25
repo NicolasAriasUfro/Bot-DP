@@ -3,7 +3,7 @@ from langchain.agents import create_react_agent, AgentExecutor
 from langchain.tools import StructuredTool
 from langchain_ollama.llms import OllamaLLM
 from app.utils.load_prompt import load_prompt_from_file
-from app.config.config import OLLAMA_URL, OLLAMA_MODEL
+from app.config.config import OLLAMA_URL, OLLAMA_MODEL, FINANCIAL_PROMPT
 import requests
 
 class FinancialAgent:
@@ -13,8 +13,7 @@ class FinancialAgent:
          base_url=OLLAMA_URL,
          temperature=0,
       )
-# Use just the filename, not the full path
-      self.template = load_prompt_from_file("src/app/prompts/financial.txt")
+      self.template = load_prompt_from_file(FINANCIAL_PROMPT)
       self.agent_executor = self.__finalcial_agent()
    
    def get_indicador(self, indicator: str):
