@@ -153,6 +153,7 @@ class WeatherAgent:
       return AgentExecutor(
          agent=weather_agent, 
          tools=tools_for_agent, 
+         #handle_parsing_errors=True,
          verbose=True,
       )
    
