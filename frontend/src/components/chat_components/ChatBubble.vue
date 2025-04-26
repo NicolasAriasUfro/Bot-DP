@@ -7,6 +7,7 @@ const props = defineProps<{
     message: string;
     fromUser?: boolean;
     loading: boolean;
+    timeStamp: Date;
     bottomEl: HTMLElement | null; // cucha: questionable html element as prop but it works
 }>();
 
@@ -57,13 +58,20 @@ watch(
             <!-- TODO: CHANGE CUESTIONABLE LOOKING ICON -->
             <font-awesome-icon icon="fa-solid fa-robot" size="lg" />
         </div>
-        <div
-            class="flex p-3 m-2 min-w-15 text-sm sm:text-base outline-1"
+        <div class="flex flex-col">
+            <div
+            class="flex px-3 pt-3 pb-1 m-2 min-w-15 text-sm sm:text-base outline-1"
             :class="bubbleClasses"
-        >
-            <div v-if="!loading">{{ displayedText  }}</div>
-            <div v-else class="flex justify-center items-center">
-                <fwb-spinner size="6" />
+            >
+                <div v-if="!loading">
+                    {{ displayedText  }} 
+                    <div class="text-end text-xs mt-1">
+                        {{ props.timeStamp.toLocaleTimeString() }}
+                    </div>
+                </div>
+                <div v-else class="flex justify-center items-center">
+                    <fwb-spinner size="6" />
+                </div>
             </div>
         </div>
     </div>
