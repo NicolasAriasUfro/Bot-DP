@@ -7,7 +7,6 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from app.agents.weather_agent import WeatherAgent
 
-
 class Test(unittest.TestCase):
    def testWeatherToolWithMadridCity(self):
      weather_agent = WeatherAgent()

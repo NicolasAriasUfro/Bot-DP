@@ -6,14 +6,12 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from app.app import app
-from app.config.logger import Logger
 from fastapi.testclient import TestClient
 
 class QueryRequest(unittest.TestCase):
    def setUp(self):
       # Create a test client for making requests
       self.client = TestClient(app)
-      self.logger = Logger()
    
    def test_query_with_weather(self):
       # Simulate a health check request

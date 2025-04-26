@@ -5,7 +5,7 @@ import os
 # Add the parent directory to the Python path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from app.config.logger import Logger
+from app.utils.logger import Logger
 from app.service.nlp_service import NlpService
 
 

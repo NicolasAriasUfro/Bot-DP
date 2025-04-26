@@ -1,7 +1,7 @@
-from fastapi import APIRouter, Body, HTTPException
+from fastapi import APIRouter, Body
 from pydantic import BaseModel, Field, field_validator
 from app.service.assistant_facade import AssistantServiceFacade
-from app.config.logger import Logger
+from app.utils.logger import Logger
 
 router_logger = Logger()
 assistant_facade_service = AssistantServiceFacade()

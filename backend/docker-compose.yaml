@@ -27,21 +27,6 @@ services:
       retries: 5
       start_period: 8s
 
-    # Servicio de inicialización para descargar el modelo
-  ollama-init:
-    image: curlimages/curl:latest
-    depends_on:
-      ollama-model:
-        condition: service_healthy
-    restart: "no"
-    command: >
-      sh -c "
-        echo 'Esperando que Ollama esté listo...'
-        sleep 5
-        echo 'Descargando modelo ollama3...'
-        curl -X POST http://ollama-model:11434/api/pull -d '{\"model\":\"llama3\"}' &&
-        echo 'Modelo descargado correctamente'
-
 
 volumes:
   models: 

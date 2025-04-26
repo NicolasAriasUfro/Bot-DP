@@ -2,7 +2,7 @@ from app.agents.weather_agent import WeatherAgent
 from app.agents.interpreter_agent import InterpreterAgent
 from app.agents.financial_agent import FinancialAgent
 from app.agents.notice_agent import NoticeAgent
-from app.config.logger import Logger
+from app.utils.logger import Logger
 from langchain.callbacks.tracers import ConsoleCallbackHandler
 
 class AssistantService:

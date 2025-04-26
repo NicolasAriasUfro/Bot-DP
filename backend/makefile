@@ -1,6 +1,11 @@
 dev:
 	python3 src/main.py
 
+test:
+	python -m coverage run -m unittest discover src/test
+	python -m coverage html
+	python -m coverage report
+
 # Build all services
 .PHONY: build
 build:
