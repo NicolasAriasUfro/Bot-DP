@@ -114,9 +114,12 @@ onMounted(() => {
                 <ChatBubble
                     v-for="msg in messages"
                     :key="msg.id"
+                    :id="msg.id"
                     :message="msg.message"
                     :from-user="msg.fromUser"
                     :loading="msg.loading"
+                    :bottomEl="bottomEl"
+                    :timeStamp="msg.timestamp"
                 />
             </div>
             <div v-else class="flex flex-1 justify-center items-center">
