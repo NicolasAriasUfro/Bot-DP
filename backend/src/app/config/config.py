@@ -5,11 +5,10 @@ load_dotenv()
 
 # Load environment variables
 WEATHER_API_KEY = os.getenv("WEATHER_API_KEY")
-TAVILY_API_KEY = os.getenv("TAVILY_API_KEY")
 TUBE_API_KEY = os.getenv("TUBE_API_KEY")
 SOURCE_CONTRY_CODE = "cl"
 OLLAMA_URL = os.getenv("OLLAMA_URL")
-OLLAMA_MODEL = "llama3"
+OLLAMA_MODEL = "mistral:7b"
 
 # Base directories
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
@@ -24,3 +23,4 @@ WEATHER_PROMPT = os.path.join(PROMPTS_DIR, 'weather.txt')
 FINANCIAL_PROMPT = os.path.join(PROMPTS_DIR, 'financial.txt')
 NOTICE_PROMPT = os.path.join(PROMPTS_DIR, 'notice.txt')
 INTERPRETER_PROMPT = os.path.join(PROMPTS_DIR, 'interpreter.txt') 
+EVALUATOR_PROMPT = os.path.join(PROMPTS_DIR, 'evaluator.txt')

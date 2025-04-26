@@ -1,0 +1,17 @@
+Dockerfile
+.dockerignore
+.env
+coverage
+.coverage
+.coveragerc
+
+venv/
+.venv/
+
+.git
+**/__pycache__
+**/*.pyc
+**/*.pyo
+**/*.pyd
+
+logs/

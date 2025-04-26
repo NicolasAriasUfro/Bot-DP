@@ -8,7 +8,10 @@ services:
       - "8888:8080"
     volumes:
       - .:/app
-  
+    depends_on:
+      ollama-model:
+        condition: service_healthy
+
   ollama-model:
     image: ollama/ollama
     container_name: ollama-model
@@ -17,6 +20,13 @@ services:
       - "11434:11434"
     volumes:
       - ./models:/models
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/version"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 8s
+
 
 volumes:
   models: 
