@@ -18,6 +18,7 @@ target/*
 !**/src/main/**/target/
 !**/src/test/**/target/
 **/src/main/resources/application.properties
+*.bat
 
 ### IntelliJ IDEA ###
 .idea

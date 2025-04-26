@@ -5,3 +5,7 @@ export interface ChatMessage {
     timestamp: Date;
     loading: boolean;
 }
+
+export interface AssistantResponse {
+    message: string;
+}
