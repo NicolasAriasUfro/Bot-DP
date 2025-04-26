@@ -9,29 +9,6 @@ export const useChatStore = defineStore("chat", {
         loading: false,
     }),
     actions: {
-        async loadMessages() {
-            this.loading = true;
-            try {
-                // TODO: UPDATE
-                const headers = {};
-                const response = await axios.get(
-                    `${API_ROUTE}/api/larutadelnico`,
-                    {
-                        headers,
-                    }
-                );
-
-                this.messages = response.data.map((msg: any) => ({
-                    ...msg,
-                    timestamp: new Date(msg.timestamp),
-                }));
-            } catch (why) {
-                console.error("Failed to load messages", why);
-            } finally {
-                this.loading = false;
-            }
-        },
-
         async assistantTrigger(newMessage: string) {
             console.info("ASSISTANT_TRIGGER WAS CALLED");
             this.loading = true;
@@ -63,15 +40,8 @@ export const useChatStore = defineStore("chat", {
 
                 // last message is currently loading
                 // update the last message with the one we got
-                if (this.messages.length > 0) {
-                    const lastIndex = this.messages.length - 1;
-                    this.messages[lastIndex] = {
-                        ...this.messages[lastIndex],
-                        message: assistantMessage.message,
-                        loading: false,
-                        timestamp: new Date(),
-                    };
-                }
+                this.handleAssistantResponse(assistantMessage);
+
             } catch (why) {
                 console.error("Could not get bot response: ", why);
             } finally {
@@ -79,6 +49,29 @@ export const useChatStore = defineStore("chat", {
             }
         },
 
+        /**
+         * Updates the last and currently loading message
+         * 
+         * @param assistantMessage 
+         */
+        handleAssistantResponse(assistantMessage: AssistantResponse) {
+            if (this.messages.length > 0) {
+                const lastIndex = this.messages.length - 1;
+                this.messages[lastIndex] = {
+                    ...this.messages[lastIndex],
+                    message: assistantMessage.message,
+                    loading: false,
+                    timestamp: new Date(),
+                };
+            }
+        },
+
+
+        /**
+         * Adds a message to the list of messages in the store
+         * 
+         * @param message 
+         */
         addMessage(message: Omit<ChatMessage, "id" | "timestamp" | "loading">) {
             const newMsg: ChatMessage = {
                 id: crypto.randomUUID(),
@@ -88,6 +81,11 @@ export const useChatStore = defineStore("chat", {
             };
             this.messages.push(newMsg);
         },
+
+        /**
+         * Adds one bot loading message,
+         * use this while waiting for the assistant response 
+         */
         addBotLoadingMessage() {
             const newMsg: ChatMessage = {
                 id: crypto.randomUUID(),
@@ -99,6 +97,9 @@ export const useChatStore = defineStore("chat", {
             this.messages.push(newMsg);
         },
 
+        /**
+         * Clears the whole chat
+         */
         clearChat() {
             this.messages = [];
         },

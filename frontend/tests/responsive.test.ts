@@ -62,8 +62,86 @@ test("renders mobile layout under 1024px", async () => {
     expect(screen.getByTestId("button-send-message")).toBeVisible();
 });
 
+test("renders desktop layout with 1920px", async () => {
+    window.innerWidth = 1920;
+    window.dispatchEvent(new Event("resize"));
+
+    render(ChatView, {
+        global: {
+            stubs: { FontAwesomeIcon: true },
+            components: {
+                ChatComponent,
+                ChatBubble,
+                UserInput,
+            },
+            plugins: [
+                createTestingPinia({
+                    // makes sure the pinia actions are functional
+                    stubActions: false,
+                }),
+            ],
+        },
+    });
+
+    // get all bubbles then test for visibility
+    const bubbles = screen.getAllByTestId("chat-bubble");
+    for (const bubble of bubbles) {
+        expect(bubble).toBeVisible();
+    }
+    expect(screen.getByTestId("navbar")).toBeVisible();
+    expect(screen.getByTestId("user-input")).toBeVisible();
+    expect(screen.getByTestId("button-send-message")).toBeVisible();
+});
+
+test("renders mobile layout with a 10 character input ", async () => {
+    window.innerWidth = 500;
+    window.dispatchEvent(new Event("resize"));
+
+    const pinia = createTestingPinia({ stubActions: false });
+    setActivePinia(pinia);
+
+    const message = `Rust is a prog`;
+    const exampleMessages = [
+        {
+            message: message,
+            fromUser: true,
+        },
+        {
+            message: message,
+            fromUser: false,
+        },
+    ];
+
+    const store = useChatStore();
+    store.clearChat();
+
+    // adds messages
+    exampleMessages.forEach((msg) => store.addMessage(msg));
+
+    render(ChatView, {
+        global: {
+            stubs: { FontAwesomeIcon: true },
+            components: {
+                ChatComponent,
+                ChatBubble,
+                UserInput,
+            },
+            plugins: [pinia],
+        },
+    });
+
+    // get all bubbles then test for visibility
+    const bubbles = screen.getAllByTestId("chat-bubble");
+    for (const bubble of bubbles) {
+        expect(bubble).toBeVisible();
+    }
+    expect(screen.getByTestId("navbar")).toBeVisible();
+    expect(screen.getByTestId("user-input")).toBeVisible();
+    expect(screen.getByTestId("button-send-message")).toBeVisible();
+});
+
 test("renders mobile layout with a 1k+ character input ", async () => {
-    window.innerWidth = 1000;
+    window.innerWidth = 500;
     window.dispatchEvent(new Event("resize"));
 
     const pinia = createTestingPinia({ stubActions: false });
