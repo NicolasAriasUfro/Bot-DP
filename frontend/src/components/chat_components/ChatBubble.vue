@@ -20,7 +20,7 @@ const typeMessage = async (message: string) => {
         // updates the scroll
         await nextTick();
         props.bottomEl?.scrollIntoView({ behavior: "smooth" });
-        
+
         await new Promise((resolve) => setTimeout(resolve, 10)); // typing speed
     }
 };
@@ -38,11 +38,6 @@ watch(
     () => props.loading,
     (newLoadingState, oldLoadingState) => {
         if (!newLoadingState && oldLoadingState) {
-            console.log('current id: ', props.id)
-            console.log('message: ', props.message)
-            console.log('old value: ', oldLoadingState)
-            console.log('new value: ', newLoadingState)
-            console.log('-----------')
             typeMessage(props.message);
         } else {
             displayedText.value = props.message;
@@ -50,10 +45,6 @@ watch(
     },
     { immediate: true }
 );
-
-onMounted(() => {
-    // typeMessage();
-});
 </script>
 
 <template>
