@@ -74,7 +74,7 @@ class WeatherAgent:
                                        params[key] = int(value)
                                  else:
                                        params[key] = value
-                              except:
+                              except ValueError: 
                                  params[key] = value
          
          # Extract parameters with default values
@@ -143,7 +143,7 @@ class WeatherAgent:
 
       tools_for_agent = [
          StructuredTool.from_function(
-            name="get_location",
+            name="get_weather",
             func=self.get_weather,
             description="Get the location for a city.",
          )
