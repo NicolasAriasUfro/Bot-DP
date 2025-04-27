@@ -15,7 +15,6 @@ Observation: the result of the action
 Thought: I now know the final answer
 Final Answer: the final answer to the original input question
 
-The most recent information is always in the first position of the array 'serie'
 If the API returns an error, inform the user that the requested data is not available.
 
 When asked about financial indicators:
@@ -25,8 +24,6 @@ When asked about financial indicators:
 4. For other indicators: Use the appropriate code (utm, ipc, etc.)
 
 DO NOT make multiple requests for the same information.
-DO NOT attempt to create a JSON file - work directly with the API response data.
-Provide clear, concise answers with the current value and date.
 
 Begin!
 

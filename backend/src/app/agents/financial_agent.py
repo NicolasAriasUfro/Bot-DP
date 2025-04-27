@@ -84,19 +84,6 @@ class FinancialAgent:
             description="""
             Get financial information.
             This function fetches data from the Mindicator API for a given indicator.
-            It constructs the URL using the indicator name and makes a GET request to the API.
-            The response is expected to be in JSON format, and the function returns the data if the request is successful.
-            If the request fails, an exception is raised with an error message.
-               
-               Example:
-                  get_indicador(dolar)
-               Example:
-                  get_indicador(uf)
-               
-               Params  
-                  indicator (str): The indicator to fetch.
-               Returns:
-                  dict: The data for the indicator.
             """,
          )
       ]
@@ -110,6 +97,6 @@ class FinancialAgent:
       return AgentExecutor(
          agent=financial_agent, 
          tools=tools_for_agent, 
-         handle_parsing_errors=True,
+         # handle_parsing_errors=True,
          verbose=True,
       )

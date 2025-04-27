@@ -145,7 +145,7 @@ class WeatherAgent:
          StructuredTool.from_function(
             name="get_weather",
             func=self.get_weather,
-            description="Get the location for a city.",
+            description="Get current weather information for a city. Input should be just the city name as a simple string (e.g. 'Santiago'). Returns temperature and weather conditions for the location. ALWAYS separate your Thought and Final Answer steps after receiving weather data.",
          )
       ]
             
@@ -158,7 +158,8 @@ class WeatherAgent:
       return AgentExecutor(
          agent=weather_agent, 
          tools=tools_for_agent, 
-         #handle_parsing_errors=True,
          verbose=True,
+         # handle_parsing_errors=True, 
+         # max_iterations=2,  
       )
    

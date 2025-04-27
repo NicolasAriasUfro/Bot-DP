@@ -29,7 +29,7 @@ class NoticeAgent:
          returns:
             dict: the data for the notice. 
       """
-      url = f"https://api.apitube.io/v1/news/everything?api_key={TUBE_API_KEY}&source.country.code={SOURCE_CONTRY_CODE}&limit=2"
+      url = f"https://api.apitube.io/v1/news/everything?api_key={TUBE_API_KEY}&source.country.code={SOURCE_CONTRY_CODE}&limit=4"
       self.logger.log(f"[NoticeAgent] Fetching data from URL: {url}")
       data = requests.get(url).json()
       if data.get("error") is None:
@@ -69,5 +69,5 @@ class NoticeAgent:
          agent=notice_agent, 
          tools=tools_for_agent, 
          verbose=True,
-         handle_parsing_errors=True,
+         # handle_parsing_errors=True,
       )
