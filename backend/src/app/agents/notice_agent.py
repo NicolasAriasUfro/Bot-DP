@@ -8,7 +8,7 @@ import requests
 import json
 # === Notice Agent ===
 class NoticeAgent:
-   def __init__(self):
+   def __init__(self) -> None:
       self.llm = OllamaLLM(model=OLLAMA_BASE_MODEL, base_url=OLLAMA_URL, temperature=0)
       self.template = load_prompt_from_file(NOTICE_PROMPT)
       self.logger = Logger()
@@ -53,22 +53,31 @@ class NoticeAgent:
       except Exception as e:
          self.logger.log_error(f"[NoticeAgent] Error processing query: {str(e)}")
          return f"Lo siento, no pude obtener las noticias en este momento: {str(e)}"
-   
-   def _simplify_json(self, data):
-      """Simplify the news JSON to focus on important parts"""
+      
+   def _simplify_json(self, data: dict) -> str:
+      """
+      Simplify the news JSON to focus on important parts
+      
+      Params:
+         data (dict): The original JSON data from the API.
+      
+      Returns:
+         str: A simplified JSON string with only the relevant information.
+      """
       try:
          simplified = {"articles": []}
          
          if "results" in data:
-            for item in data["results"]:
-               simplified["articles"].append({
-                  "title": item.get("title", ""),
-                  "description": item.get("description", ""),
-                  "published_at": item.get("published_at", ""),
-                  "source": item.get("source", {}).get("domain", "")
-               })
+               for item in data["results"]:
+                  simplified["articles"].append({
+                     "title": item.get("title", ""),
+                     "description": item.get("description", ""),
+                     "published_at": item.get("published_at", ""),
+                     "source": item.get("source", {}).get("domain", "")
+                  })
          
          return json.dumps(simplified, ensure_ascii=False)
-      except:
-         # If simplification fails, just convert to string
+      except (TypeError, ValueError, KeyError) as e:
+         # Catch specific errors that might occur during JSON processing
+         self.logger.log_error(f"[NoticeAgent] Error simplifying JSON: {str(e)}")
          return str(data)

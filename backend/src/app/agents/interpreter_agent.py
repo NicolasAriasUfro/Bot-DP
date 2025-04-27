@@ -6,7 +6,7 @@ from app.utils.logger import Logger
 from app.config.config import OLLAMA_URL, OLLAMA_BASE_MODEL, INTERPRETER_PROMPT
 
 class InterpreterAgent:
-   def __init__(self):
+   def __init__(self) -> None:
       self.llm = OllamaLLM(
          model=OLLAMA_BASE_MODEL, 
          base_url=OLLAMA_URL,

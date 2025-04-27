@@ -9,7 +9,7 @@ import json
 import requests
 
 class FinancialAgent:
-   def __init__(self):
+   def __init__(self) -> None:
       self.llm = OllamaLLM(
          model=OLLAMA_BASE_MODEL, 
          base_url=OLLAMA_URL,

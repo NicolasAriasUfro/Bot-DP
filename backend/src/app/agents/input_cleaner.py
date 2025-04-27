@@ -6,7 +6,7 @@ from app.config.config import OLLAMA_URL, OLLAMA_BASE_MODEL, CLEANER_PROMPT
 from langchain.chains import LLMChain
 
 class InputCleanerAgent:    
-   def __init__(self):
+   def __init__(self) -> None:
       self.llm = OllamaLLM(
          model=OLLAMA_BASE_MODEL, 
          base_url=OLLAMA_URL,

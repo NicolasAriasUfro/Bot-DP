@@ -26,8 +26,8 @@ class WeatherAgent:
       
       Params:
          input_str (str): A string containing city and optional coordinates either as JSON or in format 
-                        "city='Madrid', lat=40.4168, lon=-3.7038, part=''"
-                        or simply "Madrid" for city name only
+         "city='Madrid', lat=40.4168, lon=-3.7038, part=''"
+         or simply "Madrid" for city name only
          
       Returns:
          dict: The weather data for the given city.
@@ -127,7 +127,7 @@ class WeatherAgent:
          self.logger.log_error(f"[WeatherAgent] Error processing input: {e}")
          return {"error": f"[WeatherAgent] Could not process input: {str(e)}"}
       
-   def get_agent(self):
+   def get_agent(self) -> AgentExecutor:
       """
          Get the weather agent.
          
@@ -160,7 +160,7 @@ class WeatherAgent:
             Input should be just the city name as a simple string without quotes.
             Returns temperature and weather conditions for the location.
             """,         
-        )
+         )
       ]
             
       weather_agent = create_react_agent(
