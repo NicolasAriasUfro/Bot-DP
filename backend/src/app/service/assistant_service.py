@@ -23,9 +23,17 @@ class AssistantService:
                handle_parsing_errors=True
          )  
          
+         intermediate_steps = weather_result.get("intermediate_steps", [])
+         self.logger.log(f'[AssistantService] Pasos intermedios: {intermediate_steps}')
+
+         
          # Segundo agente - interpreta y presenta los datos
          friendly_response = self.interpreter_agent.chain.invoke(
-               {"raw_response": weather_result["output"]},
+               { 
+                  "raw_response": weather_result["output"],
+                  "intermediate_steps": intermediate_steps
+               },
+               
                #config={'callbacks': [ConsoleCallbackHandler()]}
          )
          return friendly_response
@@ -34,7 +42,8 @@ class AssistantService:
          
          # Usar el intérprete para generar una respuesta amigable al error
          error_context = {
-             "raw_response": f"ERROR: No pude obtener la información del clima que solicitaste debido a un problema técnico. Error específico: {str(e)}",
+            "raw_response": f"ERROR: No pude obtener la información del clima que solicitaste debido a un problema técnico. Error específico: {str(e)}",
+            "intermediate_steps": "",
          }
          
          try:
@@ -55,10 +64,16 @@ class AssistantService:
                input={"input": user_question}
          )
          
+         intermediate_steps = financial_result.get("intermediate_steps", [])
+         self.logger.log(f'[AssistantService] Pasos intermedios: {intermediate_steps}')
+
          # Segundo agente - interpreta y presenta los datos
          friendly_response = self.interpreter_agent.chain.invoke(
-               {"raw_response": financial_result["output"]},
-               #config={'callbacks': [ConsoleCallbackHandler()]}
+               {
+                  "raw_response": financial_result["output"],
+                  "intermediate_steps": intermediate_steps
+               },
+               # config={'callbacks': [ConsoleCallbackHandler()]}
          )
          return friendly_response   
       except Exception as e:
@@ -67,6 +82,7 @@ class AssistantService:
          # Usar el intérprete para generar una respuesta amigable al error
          error_context = {
                "raw_response": f"ERROR: No pude obtener la información financiera que solicitaste debido a un problema técnico. Error específico: {str(e)}",
+               "intermediate_steps": "",
                "request": user_question,
                "error": True
          }
@@ -91,24 +107,36 @@ class AssistantService:
             input={"input": user_question}
          )
          
+         
+         intermediate_steps = notice_result.get("intermediate_steps", [])
+         self.logger.log(f'[AssistantService] Pasos intermedios: {intermediate_steps}')
+         
          # Segundo agente - interpreta y presenta los datos
          friendly_response = self.interpreter_agent.chain.invoke(
-            {"raw_response": notice_result["output"]},
+            {
+               "raw_response": notice_result["output"],
+               "intermediate_steps": intermediate_steps
+            },
             #config={'callbacks': [ConsoleCallbackHandler()]}
          )
          return friendly_response
       except Exception as e:
          self.logger.log_error(f'[AssistantService] Error en consulta noticias: {e}')
+         return {"response": "Lo siento, no pude procesar tu consulta sobre noticias en este momento."}
          
    def query_interpreter(self, user_question):
       try:
            # Segundo agente - interpreta y presenta los datos
          friendly_response = self.interpreter_agent.chain.invoke(
-            {"raw_response": user_question}
+            { 
+               "raw_response": user_question,
+               "intermediate_steps": ""
+            }
          )
          return friendly_response
       except Exception as e:
          self.logger.log_error(f'[AssistantService] Error en consulta intérprete: {e}')
+         return {"response": "Lo siento, no pude procesar tu consulta en este momento."}
    
    
       

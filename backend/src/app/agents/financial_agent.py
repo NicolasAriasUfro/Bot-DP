@@ -29,9 +29,9 @@ class FinancialAgent:
       If the request fails, an exception is raised with an error message.
          
          Example:
-            get_indicator("dolar")
+            get_indicator(dolar)
          Example:
-            get_indicator("uf")
+            get_indicator(uf)
          
          Params  
             indicator (str): The indicator to fetch.
@@ -84,6 +84,11 @@ class FinancialAgent:
             description="""
             Get financial information.
             This function fetches data from the Mindicator API for a given indicator.
+            IMPORTANT: Use without quotes around parameters.
+            Examples:
+            - For dolar: get_indicador(dolar)
+            - For UF: get_indicador(uf)
+            - For euro: get_indicador(euro)
             """,
          )
       ]
@@ -97,6 +102,7 @@ class FinancialAgent:
       return AgentExecutor(
          agent=financial_agent, 
          tools=tools_for_agent, 
-         # handle_parsing_errors=True,
+         handle_parsing_errors=True,
          verbose=True,
+         return_intermediate_steps=True 
       )

@@ -145,8 +145,22 @@ class WeatherAgent:
          StructuredTool.from_function(
             name="get_weather",
             func=self.get_weather,
-            description="Get current weather information for a city. Input should be just the city name as a simple string (e.g. 'Santiago'). Returns temperature and weather conditions for the location. ALWAYS separate your Thought and Final Answer steps after receiving weather data.",
-         )
+            description="""
+            Get current weather information for a city.
+            
+            CORRECT USAGE:
+            Action: get_weather
+            Action Input: Santiago
+            
+            Action: get_weather
+            Action Input: Temuco
+            
+            DO NOT USE: get_weather(input_str: 'Santiago')
+            
+            Input should be just the city name as a simple string without quotes.
+            Returns temperature and weather conditions for the location.
+            """,         
+        )
       ]
             
       weather_agent = create_react_agent(
@@ -159,7 +173,7 @@ class WeatherAgent:
          agent=weather_agent, 
          tools=tools_for_agent, 
          verbose=True,
-         # handle_parsing_errors=True, 
-         # max_iterations=2,  
+         handle_parsing_errors=True, 
+         return_intermediate_steps=True 
       )
    

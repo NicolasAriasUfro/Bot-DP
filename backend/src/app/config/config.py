@@ -8,7 +8,7 @@ WEATHER_API_KEY = os.getenv("WEATHER_API_KEY")
 TUBE_API_KEY = os.getenv("TUBE_API_KEY")
 SOURCE_CONTRY_CODE = "cl"
 OLLAMA_URL = os.getenv("OLLAMA_URL")
-OLLAMA_MODEL = "mistral:7b"
+OLLAMA_MODEL = "gemma3:1b-it-fp16"
 
 # Base directories
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))

@@ -26,7 +26,7 @@ class InterpreterAgent:
       """
       interpreter_prompt = PromptTemplate(
          template=self.template,
-         input_variables=["raw_response"],
+         input_variables=["raw_response", "intermediate_steps"],
       )
 
       parser = StrOutputParser()
