@@ -2,6 +2,7 @@ from langchain_core.prompts import PromptTemplate
 from langchain.agents import create_react_agent, AgentExecutor
 from langchain.tools import StructuredTool
 from langchain_ollama.llms import OllamaLLM
+from app.utils.logger import Logger
 from app.utils.load_prompt import load_prompt_from_file
 from app.config.config import OLLAMA_URL, OLLAMA_MODEL, FINANCIAL_PROMPT
 import json 
@@ -14,8 +15,10 @@ class FinancialAgent:
          base_url=OLLAMA_URL,
          temperature=0, 
       )
+      self.logger = Logger()
       self.template = load_prompt_from_file(FINANCIAL_PROMPT)
       self.agent_executor = self.__finalcial_agent()
+      self.logger.log(f"Financial agent initialized with model: {OLLAMA_MODEL}")
    
    def get_indicador(self, indicator: str):
       """
@@ -36,18 +39,22 @@ class FinancialAgent:
             dict: The data for the indicator.
       """
       try:
-            
          url = f"https://mindicador.cl/api/{indicator}"
+         self.logger.log(f"[FinancialAgent] Fetching data from URL: {url}")
          data = requests.get(url).json()
          if data.get("error") is None:
             return data
          else:
+            self.logger.log_error(f"[FinancialAgent] Error fetching indicator {indicator}: {data['message']}")
             raise Exception(f"Error fetching indicator {indicator}: {data['message']}") 
       except requests.exceptions.RequestException as e:
+         self.logger.log_error(f"[FinancialAgent] Request error for indicator {indicator}: {str(e)}")
          raise Exception(f"Error fetching indicator {indicator}: {str(e)}")
       except json.JSONDecodeError as e:
+         self.logger.log_error(f"[FinancialAgent] JSON decode error for indicator {indicator}: {str(e)}")
          raise Exception(f"Error parsing JSON response for indicator {indicator}: {str(e)}")
       except Exception as e:
+         self.logger.log_error(f"[FinancialAgent] Unexpected error for indicator {indicator}: {str(e)}")
          raise Exception(f"An unexpected error occurred: {str(e)}")   
    
    def __finalcial_agent(self) -> AgentExecutor:

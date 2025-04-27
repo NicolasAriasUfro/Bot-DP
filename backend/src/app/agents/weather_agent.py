@@ -1,10 +1,12 @@
 from langchain_ollama.llms import OllamaLLM
 from langchain_core.prompts import PromptTemplate
 from app.utils.load_prompt import load_prompt_from_file
+from app.utils.logger import Logger
 from app.config.config import WEATHER_API_KEY, OLLAMA_URL, OLLAMA_MODEL, WEATHER_PROMPT
 from langchain.tools import StructuredTool
 from langchain.agents import (create_react_agent, AgentExecutor)
 import requests
+import json
 
 class WeatherAgent:
    def __init__(self):
@@ -13,8 +15,10 @@ class WeatherAgent:
          base_url=OLLAMA_URL, 
          temperature=0,
       )
+      self.logger = Logger()
       self.template = load_prompt_from_file(WEATHER_PROMPT)
       self.agent_executor = self.get_agent()
+      self.logger.log(f"Weather agent initialized with model: {OLLAMA_MODEL}")
    
    def get_weather(self, input_str: str) -> dict:
       """
@@ -28,10 +32,10 @@ class WeatherAgent:
       Returns:
          dict: The weather data for the given city.
       """
-      print("Weather function called")
+      self.logger.log("[WeatherAgent] Weather function called")
       try:
-         import json
-         print(f"Input string: {input_str}")
+
+         self.logger.log(f"[WeatherAgent] Input string: {input_str}")
          # Parse the input to extract parameters   
          params = {}
          
@@ -50,7 +54,7 @@ class WeatherAgent:
                   try:
                      params = json.loads(input_str)
                   except json.JSONDecodeError as e:
-                     print(f"Error parsing JSON input: {e}")
+                     self.logger.log_error(f"[WeatherAgent] Error parsing JSON input: {e}")
                      return {"error": f"Invalid JSON format: {str(e)}"}
                else:
                   # Parse key-value pairs from string format
@@ -83,7 +87,8 @@ class WeatherAgent:
          
          # Validate required parameters
          if not city and (lat is None or lon is None):
-               return {"error": "Missing required parameters: either city or both lat and lon must be provided"}
+            self.logger.log_error("[WeatherAgent] Missing required parameters: either city or both lat and lon must be provided")
+            return {"error": "Missing required parameters: either city or both lat and lon must be provided"}
          
          # Construct API request
          url = "https://api.openweathermap.org/data/2.5/weather"
@@ -99,15 +104,16 @@ class WeatherAgent:
                try:
                   api_params["lat"] = float(lat)
                   api_params["lon"] = float(lon)
-                  print(f"Using coordinates: Latitude: {lat}, Longitude: {lon}")
+                  self.logger.log(f"[WeatherAgent] Using coordinates: Latitude: {lat}, Longitude: {lon}")
                except (ValueError, TypeError):
+                  self.logger.log_error("[WeatherAgent] Invalid coordinates: lat and lon must be numeric values")
                   return {"error": "Invalid coordinates: lat and lon must be numeric values"}
          else:
                api_params["q"] = city
-               print(f"Using city name: {city}")
+               self.logger.log(f"[WeatherAgent] Using city name: {city}")
          
          # Make the request
-         print(f"Making API request to {url} with params: {api_params}")
+         self.logger.log(f"Making API request to {url} with params: {api_params}")
          request = requests.get(url, params=api_params)
          request.raise_for_status()
          
@@ -115,11 +121,11 @@ class WeatherAgent:
          return request.json()
       
       except requests.exceptions.RequestException as e:
-         print(f"Error fetching weather data: {e}")
+         self.logger.log_error(f"[WeatherAgent] Error fetching weather data: {e}")
          return {"error": f"API request failed: {str(e)}"}
       except Exception as e:
-         print(f"Error processing input: {e}")
-         return {"error": f"Could not process input: {str(e)}"}
+         self.logger.log_error(f"[WeatherAgent] Error processing input: {e}")
+         return {"error": f"[WeatherAgent] Could not process input: {str(e)}"}
       
    def get_agent(self):
       """
@@ -134,7 +140,6 @@ class WeatherAgent:
          template=template,
          input_variables=["input", "tools", "tool_names", "agent_scratchpad"], 
       )
-
 
       tools_for_agent = [
          StructuredTool.from_function(

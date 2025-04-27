@@ -3,6 +3,7 @@ from langchain_ollama.llms import OllamaLLM
 from langchain.tools import StructuredTool
 from langchain.agents import (create_react_agent, AgentExecutor)
 from app.utils.load_prompt import load_prompt_from_file
+from app.utils.logger import Logger
 from app.config.config import SOURCE_CONTRY_CODE, OLLAMA_MODEL, OLLAMA_URL, TUBE_API_KEY, NOTICE_PROMPT
 import requests
 
@@ -15,6 +16,8 @@ class NoticeAgent:
       )
       self.template = load_prompt_from_file(NOTICE_PROMPT)
       self.agent_executor = self.__notice_agent()
+      self.logger = Logger()
+      self.logger.log(f"Notice agent initialized with model: {OLLAMA_MODEL}")
       
    def get_notices(self) -> dict:
       """
@@ -27,10 +30,12 @@ class NoticeAgent:
             dict: the data for the notice. 
       """
       url = f"https://api.apitube.io/v1/news/everything?api_key={TUBE_API_KEY}&source.country.code={SOURCE_CONTRY_CODE}&limit=2"
+      self.logger.log(f"[NoticeAgent] Fetching data from URL: {url}")
       data = requests.get(url).json()
       if data.get("error") is None:
          return data
       else:
+         self.logger.log_error(f"[NoticeAgent] Error fetching: {data['message']}")
          raise Exception("Error fetching")  
       
    def __notice_agent(self) -> AgentExecutor:

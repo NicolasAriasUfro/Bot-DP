@@ -17,6 +17,7 @@ class QueryRequest(BaseModel):
    def query_must_not_be_empty(cls, v):
       v = v.strip()
       if not v:
+         router_logger.log_error('La consulta no puede estar vacia')
          raise ValueError('La consulta no puede estar vacia')
       return v
 
@@ -33,7 +34,7 @@ def query(request: QueryRequest = Body(...)):
    """
    Endpoint to handle user queries.
    """
-   router_logger.log(f'Query recived: {request.query}')
+   router_logger.log(f'[AssistantRouter] Query recived: {request.query}')
 
    
    response = assistant_facade_service.determinate_flow(request.query)
