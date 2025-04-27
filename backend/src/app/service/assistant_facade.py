@@ -44,14 +44,12 @@ class AssistantServiceFacade:
          
          if category == "clima":
             return self.assistant_service.query_weather(query)
-         elif category == "dolar" or category == "uf":
+         elif category == "uf" or category == "dolar":
             return self.assistant_service.query_financial(query)
          elif category == "noticias":
             return self.assistant_service.query_notice(query)
-         elif category == "other":
+         elif category == "otro":
             return self.assistant_service.query_interpreter(query)
-         elif category == "saludo":
-            return {"response": "Hola! ¿En qué puedo ayudarte hoy?"}
          else:
             self.logger.log(f"Unknown category: {category}")
             return {"response": "Lo siento, no entiendo tu consulta."}

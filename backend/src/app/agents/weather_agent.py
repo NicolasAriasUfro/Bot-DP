@@ -2,7 +2,7 @@ from langchain_ollama.llms import OllamaLLM
 from langchain_core.prompts import PromptTemplate
 from app.utils.load_prompt import load_prompt_from_file
 from app.utils.logger import Logger
-from app.config.config import WEATHER_API_KEY, OLLAMA_URL, OLLAMA_MODEL, WEATHER_PROMPT
+from app.config.config import WEATHER_API_KEY, OLLAMA_URL, OLLAMA_BASE_MODEL, WEATHER_PROMPT
 from langchain.tools import StructuredTool
 from langchain.agents import (create_react_agent, AgentExecutor)
 import requests
@@ -11,14 +11,14 @@ import json
 class WeatherAgent:
    def __init__(self):
       self.llm = OllamaLLM(
-         model=OLLAMA_MODEL, 
+         model=OLLAMA_BASE_MODEL, 
          base_url=OLLAMA_URL, 
          temperature=0,
       )
       self.logger = Logger()
       self.template = load_prompt_from_file(WEATHER_PROMPT)
       self.agent_executor = self.get_agent()
-      self.logger.log(f"Weather agent initialized with model: {OLLAMA_MODEL}")
+      self.logger.log(f"Weather agent initialized with model: {OLLAMA_BASE_MODEL}")
    
    def get_weather(self, input_str: str) -> dict:
       """

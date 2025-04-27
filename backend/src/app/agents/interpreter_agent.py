@@ -3,19 +3,19 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_ollama.llms import OllamaLLM
 from app.utils.load_prompt import load_prompt_from_file
 from app.utils.logger import Logger
-from app.config.config import OLLAMA_URL, OLLAMA_MODEL, INTERPRETER_PROMPT
+from app.config.config import OLLAMA_URL, OLLAMA_BASE_MODEL, INTERPRETER_PROMPT
 
 class InterpreterAgent:
    def __init__(self):
       self.llm = OllamaLLM(
-         model=OLLAMA_MODEL, 
+         model=OLLAMA_BASE_MODEL, 
          base_url=OLLAMA_URL,
          temperature=0,
       )
       self.template = load_prompt_from_file(INTERPRETER_PROMPT)
       self.chain = self.get_interpreter_agent()
       self.logger = Logger()
-      self.logger.log(f"Interpreter agent initialized with model: {OLLAMA_MODEL}")
+      self.logger.log(f"Interpreter agent initialized with model: {OLLAMA_BASE_MODEL}")
       
    def get_interpreter_agent(self):
       """

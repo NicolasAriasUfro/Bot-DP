@@ -4,21 +4,22 @@ from langchain.tools import StructuredTool
 from langchain_ollama.llms import OllamaLLM
 from app.utils.logger import Logger
 from app.utils.load_prompt import load_prompt_from_file
-from app.config.config import OLLAMA_URL, OLLAMA_MODEL, FINANCIAL_PROMPT
+from app.config.config import OLLAMA_URL, OLLAMA_BASE_MODEL, FINANCIAL_PROMPT
 import json 
 import requests
 
 class FinancialAgent:
    def __init__(self):
       self.llm = OllamaLLM(
-         model=OLLAMA_MODEL, 
+         model=OLLAMA_BASE_MODEL, 
          base_url=OLLAMA_URL,
          temperature=0, 
       )
       self.logger = Logger()
       self.template = load_prompt_from_file(FINANCIAL_PROMPT)
       self.agent_executor = self.__finalcial_agent()
-      self.logger.log(f"Financial agent initialized with model: {OLLAMA_MODEL}")
+      self.logger.log(f"Financial agent initialized with model: {OLLAMA_BASE_MODEL}")
+   
    
    def get_indicador(self, indicator: str):
       """

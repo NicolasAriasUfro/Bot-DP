@@ -18,12 +18,12 @@ class NlpService:
       Args:
          query (str): The user's input query
          threshold (float): Confidence threshold to accept classification
-         
+      
       Returns:
-         str: The category of the query (clima, dolar, uf, noticias, saludo, other)
+         str: The category of the query (clima, dolar, uf, noticias, otro)
       """
       self.logger.log(f"[NLPService] Classifying query: {query}")
-      categories = ['clima', 'dolar', 'uf', 'noticias', 'saludo']
+      categories = ['clima', 'dolar', 'uf', 'noticias', 'otro']
       result = self.classifier(query, candidate_labels=categories)
       
       # Get the highest scoring category and its score
@@ -36,6 +36,6 @@ class NlpService:
          return top_category
       else:
          self.logger.log(f"[NLPService] Classification confidence too low: {top_score:.2f}")
-         return "other"  # Default category if confidence is too low
+         return "otro"  
       
       
