@@ -16,18 +16,11 @@ export const useChatStore = defineStore("chat", {
                 const headers = {};
                 const url = `${API_ROUTE}/assistant/query`;
                 const data = {
-                    message: newMessage,
+                    query: newMessage,
                 };
                 const response = await axios.post(url, data, {
                     headers,
                 });
-
-                // gets response and parses it
-                const assistantMessage: AssistantResponse = {
-                    message: response.data.response,
-                };
-
-                console.info("message received: ", assistantMessage.message);
 
                 // TODO: REMOVE THIS ON PROD
                 // const test_message = `There's something magical about the way a warm,
@@ -36,12 +29,21 @@ export const useChatStore = defineStore("chat", {
                 //     Food isn’t just nourishment; it’s tradition, culture, and memory served on a plate.
                 //     Whether it’s a slow-cooked stew passed down through generations or an experimental
                 //     fusion taco from a food truck, each bite tells a story. And often, the best conversations and connections
-                //     happen not in the living room or office, but around a kitchen table, over a shared love for something delicious.`;
+                //     happen not in the living room or office, but around a kitchen table, over a shared love for something delicious.
+                //     https://python.langchain.com/docs/troubleshooting/errors/OUTPUT_PARSING_FAILURE
+                //     `;
+
+                // gets response and parses it
+                const assistantMessage: AssistantResponse = {
+                    message: response.data.response,
+                    // message: test_message,
+                };
+
+                console.info("message received: ", assistantMessage.message);
 
                 // last message is currently loading
                 // update the last message with the one we got
                 this.handleAssistantResponse(assistantMessage);
-
             } catch (why) {
                 console.error("Could not get bot response: ", why);
             } finally {
@@ -51,8 +53,8 @@ export const useChatStore = defineStore("chat", {
 
         /**
          * Updates the last and currently loading message
-         * 
-         * @param assistantMessage 
+         *
+         * @param assistantMessage
          */
         handleAssistantResponse(assistantMessage: AssistantResponse) {
             if (this.messages.length > 0) {
@@ -66,11 +68,10 @@ export const useChatStore = defineStore("chat", {
             }
         },
 
-
         /**
          * Adds a message to the list of messages in the store
-         * 
-         * @param message 
+         *
+         * @param message
          */
         addMessage(message: Omit<ChatMessage, "id" | "timestamp" | "loading">) {
             const newMsg: ChatMessage = {
@@ -84,7 +85,7 @@ export const useChatStore = defineStore("chat", {
 
         /**
          * Adds one bot loading message,
-         * use this while waiting for the assistant response 
+         * use this while waiting for the assistant response
          */
         addBotLoadingMessage() {
             const newMsg: ChatMessage = {
@@ -102,6 +103,12 @@ export const useChatStore = defineStore("chat", {
          */
         clearChat() {
             this.messages = [];
+        },
+        restoreTimestamps() {
+            this.messages = this.messages.map((msg) => ({
+                ...msg,
+                timestamp: new Date(msg.timestamp),
+            }));
         },
     },
     persist: true,

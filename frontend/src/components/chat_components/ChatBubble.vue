@@ -51,7 +51,7 @@ watch(
 <template>
     <div
         data-testid="chat-bubble"
-        class="flex items-start gap-2 m-2"
+        class="flex items-start gap-2 m-2 transition-all duration-700 transition-normal"
         :class="{ 'self-end': fromUser, 'self-start': !fromUser }"
     >
         <div v-if="!fromUser" class="pt-2 pl-2">
@@ -63,13 +63,13 @@ watch(
             class="flex px-3 pt-3 pb-1 m-2 min-w-15 text-sm sm:text-base outline-1"
             :class="bubbleClasses"
             >
-                <div v-if="!loading">
+                <div v-if="!loading" class="whitespace-normal break-normal wrap-anywhere">
                     {{ displayedText  }} 
                     <div class="text-end text-xs mt-1">
                         {{ props.timeStamp.toLocaleTimeString() }}
                     </div>
                 </div>
-                <div v-else class="flex justify-center items-center">
+                <div v-else class="flex pb-2 justify-center items-center">
                     <fwb-spinner size="6" />
                 </div>
             </div>
