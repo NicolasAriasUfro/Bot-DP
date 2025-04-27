@@ -25,6 +25,7 @@ When asked about financial indicators:
 4. For other indicators: Use the appropriate code (utm, ipc, etc.)
 
 DO NOT make multiple requests for the same information.
+DO NOT attempt to create a JSON file - work directly with the API response data.
 Provide clear, concise answers with the current value and date.
 
 Begin!

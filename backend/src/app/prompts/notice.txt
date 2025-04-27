@@ -13,7 +13,8 @@ Observation: the result of the action
 Thought: I now know the final answer
 Final Answer: return ONLY the raw JSON data from the API without any additional text, explanation, or formatting
 
-IMPORTANT: When you retrieve the news data, DO NOT iterate more than once. Return the JSON data as your final answer without modifications.
+IMPORTANT: When you retrieve the news data, DO NOT iterate more than once. Return the data as your final answer without modifications. DO NOT attempt to create a JSON file - simply return the raw JSON data directly to avoid parsing errors.
+
 
 Begin!
 

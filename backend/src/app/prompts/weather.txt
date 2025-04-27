@@ -20,6 +20,9 @@ IMPORTANT RULES:
 4. ALWAYS use "Final Answer:" as the LAST step
 5. NEVER include a Final Answer and continue with Actions in the same response
 6. NEVER try to use tools beyond answering the question
+7. DO NOT CONVERT tool outputs to JSON - present them as readable text
+8. When you receive JSON data from tools, EXTRACT the relevant information and present it in plain language
+9. Your Final Answer should ALWAYS be in natural language, NEVER in JSON format
 
 Begin!
 
