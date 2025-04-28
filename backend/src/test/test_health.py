@@ -15,7 +15,7 @@ class HealthRequest(unittest.TestCase):
    
    def test_health_check(self):
       # Simulate a health check request
-      response = self.client.get('/api')
+      response = self.client.get('/health')
       
       # Check if the response is 200 OK
       self.assertEqual(response.status_code, 200)

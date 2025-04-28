@@ -1,6 +1,6 @@
-from fastapi import APIRouter, Body
-from pydantic import BaseModel, Field, field_validator
+from fastapi import APIRouter, Body, HTTPException
 from app.service.assistant_facade import AssistantServiceFacade
+from app.dto.query_dto import QueryRequest, QueryResponse
 from app.utils.logger import Logger
 
 router_logger = Logger()
@@ -10,35 +10,39 @@ assistant_router = APIRouter(
    prefix="/assistant"
 )
 
-class QueryRequest(BaseModel):
-   query: str = Field(..., min_length=2, max_length=500, description="La consulta del usuario")
-
-   @field_validator('query')
-   def query_must_not_be_empty(cls, v):
-      v = v.strip()
-      if not v:
-         router_logger.log_error('La consulta no puede estar vacia')
-         raise ValueError('La consulta no puede estar vacia')
-      return v
-
-class QueryResponse(BaseModel):
-   response: str
-
-@assistant_router.get("/chatbot")
-def reply():
-   chat_bot_response = "respuesta del chatbot"
-   return chat_bot_response
-
 @assistant_router.post("/query", response_model=QueryResponse)
 def query(request: QueryRequest = Body(...)):
    """
    Endpoint to handle user queries.
+   --------------------------------
+   
+   This endpoint validates the input, processes the query through the appropriate
+   assistant service, and returns a formatted response.
+   
+   Params:
+      request: The user's query request
+      
+   Returns:
+      QueryResponse: The assistant's response
+      
+   Raises:
+      400: If the query is invalid
+      500: If an internal error occurs
    """
-   router_logger.log(f'[AssistantRouter] Query recived: {request.query}')
-
-   
-   response = assistant_facade_service.determinate_flow(request.query)
-   
-   return { 
-      "response": str(response)
-   }
+   try:
+      router_logger.log(f'[AssistantRouter] Query recived: {request.query}')
+      
+      response = assistant_facade_service.determinate_flow(request.query)
+      
+      return { 
+         "response": str(response)
+      }
+   except ValueError as e:
+      router_logger.log_error(f'[AssistantRouter] Validation error: {str(e)}')
+      raise HTTPException(status_code=400, detail=str(e))
+   except Exception as e:
+      router_logger.log_error(f'[AssistantRouter] Error processing query: {str(e)}')
+      raise HTTPException(
+         status_code=500, 
+         detail="Lo sentimos, ha ocurrido un error procesando tu consulta."
+      )
