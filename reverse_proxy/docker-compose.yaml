@@ -7,8 +7,6 @@ services:
       dockerfile: build/Dockerfile
     ports:
       - "28000:8080"
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
     networks:
       - redes_pulentas
 

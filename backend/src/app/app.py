@@ -18,7 +18,7 @@ app.add_middleware(
 logger.log("CORS middleware added")
 
 
-app.include_router(app_router, prefix='/api')
+app.include_router(app_router)
 logger.log("FastAPI routers added")
 
 
