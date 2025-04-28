@@ -2,6 +2,7 @@
 <script setup lang="ts">
 import ChatBubble from "@/components/chat_components/ChatBubble.vue";
 import UserInput from "@/components/chat_components/UserInput.vue";
+import WelcomeFunctions from "@/components/WelcomeFunctions.vue"
 import { useChatStore } from "@/stores/chat";
 import { computed, nextTick, onMounted, ref, watch } from "vue";
 import { FwbSpinner } from "flowbite-vue";
@@ -52,37 +53,24 @@ function handleSendMessage(msg: string) {
 
 // const exampleMessages = [
 //     { message: "Hola 👋 ¿En qué puedo ayudarte hoy?", fromUser: false },
-//     { message: "Hola, quiero pedir unas papas fritas.", fromUser: true },
-//     {
-//         message:
-//             "¡Perfecto! Tenemos papas fritas clásicas, con queso cheddar, o con tocino y salsa especial. Todas vienen en tamaño individual o para compartir. ¿Cuál prefieres?",
-//         fromUser: false,
-//     },
-//     {
-//         message: "Las clásicas están bien. ¿Cuánto cuestan las grandes?",
-//         fromUser: true,
-//     },
-//     {
-//         message:
-//             "Las papas fritas clásicas grandes cuestan $3.200. También puedes agregarle una salsa extra por $500 si quieres darle un toque especial 🍟✨.",
-//         fromUser: false,
-//     },
-//     {
-//         message: "Perfecto, agrégame una por favor. ¿Cuánto demora?",
-//         fromUser: true,
-//     },
-//     {
-//         message:
-//             "Tu pedido estará listo en aproximadamente 20 minutos. Puedes venir a retirarlo o pedir entrega a domicilio por $1.000 extra.",
-//         fromUser: false,
-//     },
-//     { message: "Lo retiro yo. Gracias!", fromUser: true },
-//     {
-//         message: "¡De nada! Te esperamos. Que tengas un buen día 😊",
-//         fromUser: false,
-//     },
+//     { message: "Hola, estoy interesado en conocer más sobre sus servicios de marketing digital.", fromUser: true },
+//     { message: "¡Excelente! Ofrecemos estrategias de marketing en redes sociales, SEO, publicidad pagada y creación de contenido. ¿Te interesa algún servicio en particular?", fromUser: false },
+//     { message: "Me interesa principalmente la parte de redes sociales.", fromUser: true },
+//     { message: "Perfecto. ¿Tu empresa ya tiene perfiles activos o necesitarías crearlos desde cero?", fromUser: false },
+//     { message: "Ya tenemos perfiles, pero no hemos tenido mucha actividad últimamente.", fromUser: true },
+//     { message: "Entiendo. Podemos ofrecerte un plan de reactivación de redes que incluye publicaciones semanales, campañas pagadas y gestión de la comunidad. ¿Qué te parece?", fromUser: false },
+//     { message: "Suena bien. ¿Podrías enviarme una propuesta detallada?", fromUser: true },
+//     { message: "Claro. ¿Podrías proporcionarme el nombre de tu empresa y una breve descripción de tu público objetivo?", fromUser: false },
+//     { message: "Nuestra empresa se llama EcoVibe, vendemos productos ecológicos y nuestro público son jóvenes de entre 20 y 35 años.", fromUser: true },
+//     { message: "¡Excelente! Basándonos en eso, diseñaremos un plan con contenido atractivo, campañas de concientización y colaboraciones con influencers ecológicos. ¿Te gustaría incluir también manejo de anuncios pagados?", fromUser: false },
+//     { message: "Sí, me gustaría saber cómo funcionan los anuncios.", fromUser: true },
+//     { message: "Perfecto. Nos encargamos de segmentar la audiencia, diseñar los anuncios y optimizar las campañas para maximizar el retorno de inversión. Podemos empezar con un presupuesto pequeño e ir escalando. ¿Te parece bien?", fromUser: false },
+//     { message: "Sí, me interesa. ¿Cuál sería el siguiente paso?", fromUser: true },
+//     { message: "Te enviaré un formulario para completar algunos datos adicionales, y luego agendaremos una reunión para presentarte la propuesta oficial. ¿Te parece bien esta semana?", fromUser: false },
+//     { message: "Me parece perfecto. Muchas gracias por tu ayuda.", fromUser: true },
 // ];
 
+// exampleMessages.forEach((msg) => chat.addMessage(msg));
 const messages = computed(() => chat.messages);
 
 // gets the dummy element at the bottom
@@ -135,13 +123,17 @@ onMounted(() => {
                 v-if="isAtBottom"
                 class="sticky top-0 z-10 min-h-20 bg-gradient-to-b from-white to-transparent pointer-events-none"
             ></div> -->
-            <div v-if="messages.length == 0" class="flex flex-1 text-center justify-center align-items-middle transition-all">
-                <div class="flex pt-20 text-middle">
+            <div v-if="messages.length == 0" class="flex flex-1 flex-col text-center justify-center align-items-middle transition-all">
+                <div class="flex mb-10 justify-center text-middle">
                     <p class="text-4xl bg-gradient-to-tr from-background to-sky-300 bg-clip-text text-transparent font-semibold ">
                         {{welcomeMessage}}
                     </p>
                 </div>
+
+                <WelcomeFunctions />
             </div>
+
+
 
             <div v-else class="flex flex-1">
                 <div v-if="!loading" class="flex flex-col flex-1">
