@@ -29,7 +29,7 @@ test("calls function in chatView when user sends a message", async () => {
     const store = useChatStore();
     const spy = vi.spyOn(store, "assistantTrigger");
     const input = screen.getByPlaceholderText("Escribe un mensaje..");
-    const button = screen.getByRole("button");
+    const button = screen.getByTestId("button-send-message");
 
     const messages = ["Hola test", "¿Qué tiempo hace?", "Valor del dólar"];
 

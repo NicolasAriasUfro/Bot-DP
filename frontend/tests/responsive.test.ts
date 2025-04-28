@@ -8,15 +8,41 @@ import UserInput from "@/components/chat_components/UserInput.vue";
 import { useChatStore } from "@/stores/chat";
 import { setActivePinia } from "pinia";
 
+const exampleMessages = [
+    { message: "Hola 👋 ¿En qué puedo ayudarte hoy?", fromUser: false },
+    {
+        message:
+            "Hola, estoy interesado en conocer más sobre sus servicios de marketing digital.",
+        fromUser: true,
+    },
+    {
+        message:
+            "¡Excelente! Ofrecemos estrategias de marketing en redes sociales, SEO, publicidad pagada y creación de contenido. ¿Te interesa algún servicio en particular?",
+        fromUser: false,
+    },
+    {
+        message: "Me interesa principalmente la parte de redes sociales.",
+        fromUser: true,
+    },
+];
+
 test("renders mobile layout under 640px", async () => {
     window.innerWidth = 500;
     window.dispatchEvent(new Event("resize"));
+
+    const pinia = createTestingPinia({ stubActions: false });
+    setActivePinia(pinia);
+
+    const store = useChatStore();
+
+    // adds messages
+    exampleMessages.forEach((msg) => store.addMessage(msg));
 
     render(ChatView, {
         global: {
             stubs: { FontAwesomeIcon: true },
             components: { ChatComponent, ChatBubble, UserInput },
-            plugins: [createTestingPinia({ stubActions: false })],
+            plugins: [pinia],
         },
     });
 
@@ -35,6 +61,14 @@ test("renders mobile layout under 1024px", async () => {
     window.innerWidth = 1000;
     window.dispatchEvent(new Event("resize"));
 
+    const pinia = createTestingPinia({ stubActions: false });
+    setActivePinia(pinia);
+
+    const store = useChatStore();
+
+    // adds messages
+    exampleMessages.forEach((msg) => store.addMessage(msg));
+
     render(ChatView, {
         global: {
             stubs: { FontAwesomeIcon: true },
@@ -43,12 +77,7 @@ test("renders mobile layout under 1024px", async () => {
                 ChatBubble,
                 UserInput,
             },
-            plugins: [
-                createTestingPinia({
-                    // makes sure the pinia actions are functional
-                    stubActions: false,
-                }),
-            ],
+            plugins: [pinia],
         },
     });
 
@@ -66,6 +95,14 @@ test("renders desktop layout with 1920px", async () => {
     window.innerWidth = 1920;
     window.dispatchEvent(new Event("resize"));
 
+    const pinia = createTestingPinia({ stubActions: false });
+    setActivePinia(pinia);
+
+    const store = useChatStore();
+
+    // adds messages
+    exampleMessages.forEach((msg) => store.addMessage(msg));
+
     render(ChatView, {
         global: {
             stubs: { FontAwesomeIcon: true },
@@ -74,12 +111,7 @@ test("renders desktop layout with 1920px", async () => {
                 ChatBubble,
                 UserInput,
             },
-            plugins: [
-                createTestingPinia({
-                    // makes sure the pinia actions are functional
-                    stubActions: false,
-                }),
-            ],
+            plugins: [pinia],
         },
     });
 
