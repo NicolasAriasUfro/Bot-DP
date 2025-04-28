@@ -154,6 +154,7 @@ class AssistantService:
          # Primer agente - obtiene los datos de noticias
          notice_result = self.notice_agent.run(proccessed_cuestion['text'])
 
+         print(f'[AssistantService] Notice Result: {notice_result}')
          # Segundo agente - interpreta y presenta los datos
          friendly_response = self.interpreter_agent.chain.invoke(
             {

@@ -38,7 +38,7 @@ class NoticeAgent:
       """
       url = (
          f"https://api.apitube.io/v1/news/everything"
-         f"?api_key={TUBE_API_KEY}&source.country.code={SOURCE_CONTRY_CODE}&limit=3"
+         f"?api_key={TUBE_API_KEY}&source.country.code={SOURCE_CONTRY_CODE}&limit=5"
       )
       self.logger.info(f"[NoticeAgent] Fetching: {url}")
       return requests.get(url).json()
