@@ -1,0 +1,11 @@
+version: "3.9"
+
+services:
+    front.proyect_direction.local:
+        container_name: front.proyect_direction.local
+        build:
+          context: .
+          dockerfile: build/Dockerfile
+        image: front.proyect_direction.local
+        ports:
+            - 14000:8080
