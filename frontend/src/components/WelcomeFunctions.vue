@@ -5,7 +5,7 @@ import { useChatStore } from "@/stores/chat";
 const chatStore = useChatStore();
 
 function newsFunction() {
-    const message = "Dame las noticias actuales";
+    const message = "¿Cuáles son las últimas noticias?";
     const userMessage = "¿Cual son las noticias en la actualidad?";
     callStore(message, userMessage);
 }
@@ -17,13 +17,13 @@ function weatherFunction() {
 }
 
 function ufFunction() {
-    const message = "Dame el valor de la UF";
+    const message = "¿Cuál es el valor de la uf?";
     const userMessage = "¿Cual es el valor actual de la UF?";
     callStore(message, userMessage);
 }
 
 function dolarFunction() {
-    const message = "Dame el valor del dolar";
+    const message = "¿Cuál es el valor del dolar?";
     const userMessage = "¿Cual es el valor actual del Dolar?";
     callStore(message, userMessage);
 }
