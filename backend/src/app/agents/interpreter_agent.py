@@ -15,14 +15,17 @@ class InterpreterAgent:
       self.template = load_prompt_from_file(INTERPRETER_PROMPT)
       self.chain = self.get_interpreter_agent()
       self.logger = Logger()
-      self.logger.log(f"Interpreter agent initialized with model: {OLLAMA_BASE_MODEL}")
+      self.logger.info(f"Interpreter agent initialized with model: {OLLAMA_BASE_MODEL}")
       
    def get_interpreter_agent(self):
       """
+      Get Interpreter Agent
+      ---------------------
+      
       Get the interpreter agent chain.
       
       Returns:
-         Chain: The interpreter chain that processes raw API responses.
+         RunnableSerializer: The interpreter chain that processes raw API responses.
       """
       interpreter_prompt = PromptTemplate(
          template=self.template,

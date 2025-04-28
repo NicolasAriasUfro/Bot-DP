@@ -24,13 +24,6 @@ class Logger:
       if self.logger.handlers:
          self.logger.handlers.clear()
 
-      # Create timestamp for log file
-      # timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-
-      # Create and configure file handler
-      # file_handler = logging.FileHandler(f"../logs/extract_{timestamp}.log")
-      # file_handler.setLevel(logging.INFO)
-
       # Create and configure console handler
       console_handler = logging.StreamHandler()
       console_handler.setLevel(logging.INFO)
@@ -39,29 +32,29 @@ class Logger:
       formatter = logging.Formatter(
          "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
       )
-      # file_handler.setFormatter(formatter)
+      
+      # file_handler.setFormatter(formatter) 
       console_handler.setFormatter(formatter)
-
-      # Add handlers to logger
-      # self.logger.addHandler(file_handler)
+      
+      # Add handlers to the logger
       self.logger.addHandler(console_handler)
 
-   def log(self, message, context=None):
+   def info(self, message, context=None):
       """Log an info message, optionally with context"""
       msg = f"[{context}] {message}" if context else message
       self.logger.info(msg)
 
-   def log_error(self, message, context=None):
+   def error(self, message, context=None):
       """Log an error message, optionally with context"""
       msg = f"[{context}] {message}" if context else message
       self.logger.error(msg)
 
-   def log_warning(self, message, context=None):
+   def warning(self, message, context=None):
       """Log a warning message, optionally with context"""
       msg = f"[{context}] {message}" if context else message
       self.logger.warning(msg)
 
-   def log_debug(self, message, context=None):
+   def debug(self, message, context=None):
       """Log a debug message, optionally with context"""
       msg = f"[{context}] {message}" if context else message
       self.logger.debug(msg)

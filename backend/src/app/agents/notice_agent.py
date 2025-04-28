@@ -6,7 +6,7 @@ from app.utils.logger import Logger
 from app.config.config import OLLAMA_URL, OLLAMA_BASE_MODEL, NOTICE_PROMPT, SOURCE_CONTRY_CODE, TUBE_API_KEY
 import requests
 import json
-# === Notice Agent ===
+
 class NoticeAgent:
    def __init__(self) -> None:
       self.llm = OllamaLLM(model=OLLAMA_BASE_MODEL, base_url=OLLAMA_URL, temperature=0)
@@ -14,30 +14,47 @@ class NoticeAgent:
       self.logger = Logger()
       self.prompt = PromptTemplate(
          template=self.template,
-         input_variables=["news_data", "user_query"],
+         input_variables=[
+            "news_data", 
+            "user_query"
+         ],
       )
       self.chain = LLMChain(
          llm=self.llm,
          prompt=self.prompt,
          verbose=True
       )      
-      self.logger.log("NoticeAgent (chain) initialized.")
+      self.logger.info("NoticeAgent (chain) initialized.")
       
    def get_notices(self) -> dict:
       """
+      Get Notices
+      -----------
+      
       Fetches the latest news from the API.
+      
+      Returns:
+         dict: The JSON response from the API containing news articles.
       """
       url = (
          f"https://api.apitube.io/v1/news/everything"
          f"?api_key={TUBE_API_KEY}&source.country.code={SOURCE_CONTRY_CODE}&limit=3"
       )
-      self.logger.log(f"[NoticeAgent] Fetching: {url}")
+      self.logger.info(f"[NoticeAgent] Fetching: {url}")
       return requests.get(url).json()
-   
    
    def run(self, user_query):
       """
+      Run
+      ---
+      
       Process a news query from the user
+
+      Params:
+         user_query (str): The user's query about the news.
+      
+      Returns:
+         str: The response from the LLM based on the news data and user query.
       """
       try:
          # Get news data
@@ -51,11 +68,14 @@ class NoticeAgent:
          
          return result
       except Exception as e:
-         self.logger.log_error(f"[NoticeAgent] Error processing query: {str(e)}")
+         self.logger.error(f"[NoticeAgent] Error processing query: {str(e)}")
          return f"Lo siento, no pude obtener las noticias en este momento: {str(e)}"
       
    def _simplify_json(self, data: dict) -> str:
       """
+      Simplify JSON
+      -------------
+      
       Simplify the news JSON to focus on important parts
       
       Params:
@@ -65,19 +85,21 @@ class NoticeAgent:
          str: A simplified JSON string with only the relevant information.
       """
       try:
-         simplified = {"articles": []}
+         simplified = {
+            "articles": []
+         }
          
          if "results" in data:
-               for item in data["results"]:
-                  simplified["articles"].append({
-                     "title": item.get("title", ""),
-                     "description": item.get("description", ""),
-                     "published_at": item.get("published_at", ""),
-                     "source": item.get("source", {}).get("domain", "")
-                  })
+            for item in data["results"]:
+               simplified["articles"].append({
+                  "title": item.get("title", ""),
+                  "description": item.get("description", ""),
+                  "published_at": item.get("published_at", ""),
+                  "source": item.get("source", {}).get("domain", "")
+               })
          
          return json.dumps(simplified, ensure_ascii=False)
       except (TypeError, ValueError, KeyError) as e:
          # Catch specific errors that might occur during JSON processing
-         self.logger.log_error(f"[NoticeAgent] Error simplifying JSON: {str(e)}")
+         self.logger.error(f"[NoticeAgent] Error simplifying JSON: {str(e)}")
          return str(data)

@@ -18,55 +18,60 @@ class FinancialAgent:
       self.logger = Logger()
       self.template = load_prompt_from_file(FINANCIAL_PROMPT)
       self.agent_executor = self.__finalcial_agent()
-      self.logger.log(f"Financial agent initialized with model: {OLLAMA_BASE_MODEL}")
-   
+      self.logger.info(f"Financial agent initialized with model: {OLLAMA_BASE_MODEL}")
    
    def get_indicador(self, indicator: str):
       """
+      Get Indicator
+      -------------
+      
       Get financial information.
       This function fetches data from the Mindicator API for a given indicator.
       It constructs the URL using the indicator name and makes a GET request to the API.
       The response is expected to be in JSON format, and the function returns the data if the request is successful.
       If the request fails, an exception is raised with an error message.
          
-         Example:
-            get_indicator(dolar)
-         Example:
-            get_indicator(uf)
-         
-         Params  
-            indicator (str): The indicator to fetch.
-         Returns:
-            dict: The data for the indicator.
+      Example:
+         get_indicator(dolar)
+      Example:
+         get_indicator(uf)
+      
+      Params  
+         indicator (str): The indicator to fetch.
+      Returns:
+         dict: The data for the indicator.
       """
       try:
          url = f"https://mindicador.cl/api/{indicator}"
-         self.logger.log(f"[FinancialAgent] Fetching data from URL: {url}")
+         self.logger.info(f"[FinancialAgent] Fetching data from URL: {url}")
          data = requests.get(url).json()
          if data.get("error") is None:
             return data
          else:
-            self.logger.log_error(f"[FinancialAgent] Error fetching indicator {indicator}: {data['message']}")
+            self.logger.error(f"[FinancialAgent] Error fetching indicator {indicator}: {data['message']}")
             raise Exception(f"Error fetching indicator {indicator}: {data['message']}") 
       except requests.exceptions.RequestException as e:
-         self.logger.log_error(f"[FinancialAgent] Request error for indicator {indicator}: {str(e)}")
+         self.logger.error(f"[FinancialAgent] Request error for indicator {indicator}: {str(e)}")
          raise Exception(f"Error fetching indicator {indicator}: {str(e)}")
       except json.JSONDecodeError as e:
-         self.logger.log_error(f"[FinancialAgent] JSON decode error for indicator {indicator}: {str(e)}")
+         self.logger.error(f"[FinancialAgent] JSON decode error for indicator {indicator}: {str(e)}")
          raise Exception(f"Error parsing JSON response for indicator {indicator}: {str(e)}")
       except Exception as e:
-         self.logger.log_error(f"[FinancialAgent] Unexpected error for indicator {indicator}: {str(e)}")
+         self.logger.error(f"[FinancialAgent] Unexpected error for indicator {indicator}: {str(e)}")
          raise Exception(f"An unexpected error occurred: {str(e)}")   
    
    def __finalcial_agent(self) -> AgentExecutor:
       """
+      Financial Agent
+      ---------------
+      
       Get the financial agent.
-         This function creates a financial agent using the Langchain library.
-         It uses the OllamaLLM model and a prompt template to generate responses.
-         The agent is designed to fetch financial data from the Mindicator API.
-         
-         Returns:
-            AgentExecutor: The financial agent executor.
+      This function creates a financial agent using the Langchain library.
+      It uses the OllamaLLM model and a prompt template to generate responses.
+      The agent is designed to fetch financial data from the Mindicator API.
+      
+      Returns:
+         AgentExecutor: The financial agent executor.
       """
       prompt = PromptTemplate(
          template=self.template,

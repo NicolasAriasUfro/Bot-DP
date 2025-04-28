@@ -9,7 +9,7 @@ from app.app import app
 def main():
    uvicorn.run(
       app,
-      host="0.0.0.0",  # Importante: usar 0.0.0.0 para que sea accesible desde fuera del contenedor
+      host="0.0.0.0", 
       port=8080,
       log_level="info",
    )

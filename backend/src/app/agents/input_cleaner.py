@@ -23,20 +23,24 @@ class InputCleanerAgent:
          prompt=self.prompt,
          verbose=True
       )      
-      self.logger.log('[InputCleanerAgent] Inicializando agente de limpieza de entrada')
+      self.logger.info('[InputCleanerAgent] Inicializando agente de limpieza de entrada')
       
    def query_preprocessing(self, user_question, target_agent="general"):
       """
-      Preprocesa la consulta del usuario antes de pasarla a los agentes especializados.
+      Query Preprocessing
+      -------------------
       
-      Args:
-         user_question (str): La consulta original del usuario
-         target_agent (str): El tipo de agente al que irá destinada ("weather", "financial", "notice")
+      Preprocesses the user's query before passing it to the specialized agents.
+
+      Params:
+         user_question (str): The user's original query
+         target_agent (str): The type of agent the query will be sent to ("weather", "financial", "notice")
          
       Returns:
-         str: La consulta procesada y optimizada
+         str: The processed and optimized query
       """
-      self.logger.log(f'[AssistantService] Preprocesando consulta: {user_question}')
+
+      self.logger.info(f'[AssistantService] Preprocesando consulta: {user_question}')
       
       try:         
          processed_query = self.chain.invoke(
@@ -46,10 +50,10 @@ class InputCleanerAgent:
             },
          )
          
-         self.logger.log(f'[AssistantService] Consulta procesada: {processed_query}')
+         self.logger.info(f'[AssistantService] Consulta procesada: {processed_query}')
          return processed_query
          
       except Exception as e:
-         self.logger.log_error(f'[AssistantService] Error en preprocesamiento: {e}')
+         self.logger.error(f'[AssistantService] Error en preprocesamiento: {e}')
          # En caso de error, devolver la consulta original
          return user_question

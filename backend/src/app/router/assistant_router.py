@@ -30,7 +30,7 @@ def query(request: QueryRequest = Body(...)):
       500: If an internal error occurs
    """
    try:
-      router_logger.log(f'[AssistantRouter] Query recived: {request.query}')
+      router_logger.info(f'[AssistantRouter] Query recived: {request.query}')
       
       response = assistant_facade_service.determinate_flow(request.query)
       
@@ -38,10 +38,10 @@ def query(request: QueryRequest = Body(...)):
          "response": str(response)
       }
    except ValueError as e:
-      router_logger.log_error(f'[AssistantRouter] Validation error: {str(e)}')
+      router_logger.error(f'[AssistantRouter] Validation error: {str(e)}')
       raise HTTPException(status_code=400, detail=str(e))
    except Exception as e:
-      router_logger.log_error(f'[AssistantRouter] Error processing query: {str(e)}')
+      router_logger.error(f'[AssistantRouter] Error processing query: {str(e)}')
       raise HTTPException(
          status_code=500, 
          detail="Lo sentimos, ha ocurrido un error procesando tu consulta."

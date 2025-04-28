@@ -15,3 +15,7 @@ venv/
 **/*.pyd
 
 logs/
+
+README.md
+makefile
+logs

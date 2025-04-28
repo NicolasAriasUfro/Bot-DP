@@ -16,7 +16,9 @@ def health() -> dict[str, str]:
    Returns:
       dict: The health status of the service.
    """
-   logger.log("[AppRouter] Health check endpoint called")
-   return {"Health": "OK"}
+   logger.info("[AppRouter] Health check endpoint called")
+   return {
+      "Health": "OK"
+   }
 
 app_router.include_router(assistant_router)

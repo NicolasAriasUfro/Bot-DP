@@ -2,8 +2,8 @@ services:
   backend.proyect_direction.local:
     container_name: backend.proyect_direction.local
     build:
-        context: .
-        dockerfile: build/Dockerfile
+      context: .
+      dockerfile: build/Dockerfile
     ports:
       - "8888:8080"
     env_file:

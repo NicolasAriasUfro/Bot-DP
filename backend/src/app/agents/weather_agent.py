@@ -18,10 +18,13 @@ class WeatherAgent:
       self.logger = Logger()
       self.template = load_prompt_from_file(WEATHER_PROMPT)
       self.agent_executor = self.get_agent()
-      self.logger.log(f"Weather agent initialized with model: {OLLAMA_BASE_MODEL}")
+      self.logger.info(f"Weather agent initialized with model: {OLLAMA_BASE_MODEL}")
    
    def get_weather(self, input_str: str) -> dict:
       """
+      Get Weather
+      -----------
+      
       Search for the current weather in a given city.
       
       Params:
@@ -32,51 +35,52 @@ class WeatherAgent:
       Returns:
          dict: The weather data for the given city.
       """
-      self.logger.log("[WeatherAgent] Weather function called")
+      self.logger.info("[WeatherAgent] Weather function called")
       try:
 
-         self.logger.log(f"[WeatherAgent] Input string: {input_str}")
+         self.logger.info(f"[WeatherAgent] Input string: {input_str}")
          # Parse the input to extract parameters   
          params = {}
          
          # Check if input is already a dict
          if isinstance(input_str, dict):
-               params = input_str
+            params = input_str
+            
          # Check if input is a JSON string
          elif isinstance(input_str, str):
-               input_str = input_str.strip()
-               
-               # Simple handling for plain city names
-               if '=' not in input_str and not (input_str.startswith('{') and input_str.endswith('}')):
-                  # Treat simple strings as city names
-                  params = {'city': input_str}
-               elif input_str.startswith('{') and input_str.strip().endswith('}'):
-                  try:
-                     params = json.loads(input_str)
-                  except json.JSONDecodeError as e:
-                     self.logger.log_error(f"[WeatherAgent] Error parsing JSON input: {e}")
-                     return {"error": f"Invalid JSON format: {str(e)}"}
-               else:
-                  # Parse key-value pairs from string format
-                  parts = input_str.split(',')
-                  for part in parts:
-                     part = part.strip()
-                     if '=' in part:
-                           key_value = part.split('=', 1)  # Split on first = only
-                           if len(key_value) == 2:
-                              key = key_value[0].strip()
-                              value = key_value[1].strip().strip("'\"")
-                              # Convert numeric values to proper types
-                              try:
-                                 if '.' in value and any(c.isdigit() for c in value):
-                                       params[key] = float(value)
-                                 elif value.isdigit():
-                                       params[key] = int(value)
-                                 else:
-                                       params[key] = value
-                              except ValueError: 
-                                 params[key] = value
-         
+            input_str = input_str.strip()
+            
+            # Simple handling for plain city names
+            if '=' not in input_str and not (input_str.startswith('{') and input_str.endswith('}')):
+               # Treat simple strings as city names
+               params = {'city': input_str}
+            elif input_str.startswith('{') and input_str.strip().endswith('}'):
+               try:
+                  params = json.loads(input_str)
+               except json.JSONDecodeError as e:
+                  self.logger.error(f"[WeatherAgent] Error parsing JSON input: {e}")
+                  return {"error": f"Invalid JSON format: {str(e)}"}
+            else:
+               # Parse key-value pairs from string format
+               parts = input_str.split(',')
+               for part in parts:
+                  part = part.strip()
+                  if '=' in part:
+                     key_value = part.split('=', 1)  # Split on first = only
+                     if len(key_value) == 2:
+                        key = key_value[0].strip()
+                        value = key_value[1].strip().strip("'\"")
+                        # Convert numeric values to proper types
+                        try:
+                           if '.' in value and any(c.isdigit() for c in value):
+                              params[key] = float(value)
+                           elif value.isdigit():
+                              params[key] = int(value)
+                           else:
+                              params[key] = value
+                        except ValueError: 
+                           params[key] = value
+      
          # Extract parameters with default values
          city = params.get('city', '')
          lat = params.get('lat', None)
@@ -87,33 +91,33 @@ class WeatherAgent:
          
          # Validate required parameters
          if not city and (lat is None or lon is None):
-            self.logger.log_error("[WeatherAgent] Missing required parameters: either city or both lat and lon must be provided")
+            self.logger.error("[WeatherAgent] Missing required parameters: either city or both lat and lon must be provided")
             return {"error": "Missing required parameters: either city or both lat and lon must be provided"}
          
          # Construct API request
          url = "https://api.openweathermap.org/data/2.5/weather"
          api_params = {
-               "appid": WEATHER_API_KEY,
-               "units": units,
-               "lang": lang,
-               "part": part
+            "appid": WEATHER_API_KEY,
+            "units": units,
+            "lang": lang,
+            "part": part
          }
          
          # Set either city or coordinates
          if lat is not None and lon is not None:
-               try:
-                  api_params["lat"] = float(lat)
-                  api_params["lon"] = float(lon)
-                  self.logger.log(f"[WeatherAgent] Using coordinates: Latitude: {lat}, Longitude: {lon}")
-               except (ValueError, TypeError):
-                  self.logger.log_error("[WeatherAgent] Invalid coordinates: lat and lon must be numeric values")
-                  return {"error": "Invalid coordinates: lat and lon must be numeric values"}
+            try:
+               api_params["lat"] = float(lat)
+               api_params["lon"] = float(lon)
+               self.logger.info(f"[WeatherAgent] Using coordinates: Latitude: {lat}, Longitude: {lon}")
+            except (ValueError, TypeError):
+               self.logger.error("[WeatherAgent] Invalid coordinates: lat and lon must be numeric values")
+               return {"error": "Invalid coordinates: lat and lon must be numeric values"}
          else:
-               api_params["q"] = city
-               self.logger.log(f"[WeatherAgent] Using city name: {city}")
+            api_params["q"] = city
+            self.logger.info(f"[WeatherAgent] Using city name: {city}")
          
          # Make the request
-         self.logger.log(f"Making API request to {url} with params: {api_params}")
+         self.logger.info(f"Making API request to {url} with params: {api_params}")
          request = requests.get(url, params=api_params)
          request.raise_for_status()
          
@@ -121,24 +125,32 @@ class WeatherAgent:
          return request.json()
       
       except requests.exceptions.RequestException as e:
-         self.logger.log_error(f"[WeatherAgent] Error fetching weather data: {e}")
+         self.logger.error(f"[WeatherAgent] Error fetching weather data: {e}")
          return {"error": f"API request failed: {str(e)}"}
       except Exception as e:
-         self.logger.log_error(f"[WeatherAgent] Error processing input: {e}")
+         self.logger.error(f"[WeatherAgent] Error processing input: {e}")
          return {"error": f"[WeatherAgent] Could not process input: {str(e)}"}
       
    def get_agent(self) -> AgentExecutor:
       """
-         Get the weather agent.
-         
-         Returns:
-            AgentExecutor: The weather agent executor.
+      Get Agent
+      ---------
+      
+      Get the weather agent.
+      
+      Returns:
+         AgentExecutor: The weather agent executor.
       """
       template = self.template
       
       prompt = PromptTemplate(
          template=template,
-         input_variables=["input", "tools", "tool_names", "agent_scratchpad"], 
+         input_variables=[
+            "input", 
+            "tools", 
+            "tool_names", 
+            "agent_scratchpad"
+         ], 
       )
 
       tools_for_agent = [

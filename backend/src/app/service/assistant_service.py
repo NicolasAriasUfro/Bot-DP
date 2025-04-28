@@ -6,14 +6,14 @@ from app.agents.input_cleaner import InputCleanerAgent
 from app.utils.logger import Logger
 
 class AssistantService:
-   def __init__(self):
+   def __init__(self) -> None:
       self.weather_agent = WeatherAgent()
       self.financial_agent = FinancialAgent()
       self.notice_agent = NoticeAgent()
       self.interpreter_agent = InterpreterAgent()
       self.cleaner_agent = InputCleanerAgent()
       self.logger = Logger()
-      self.logger.log("AssistantService initialized")
+      self.logger.info("AssistantService initialized")
    
    def query_weather(self, user_question):
       """
@@ -26,7 +26,7 @@ class AssistantService:
       Returns:
          dict: The response from the weather agent.
       """
-      self.logger.log(f'[AssistantService] Consulta clima: {user_question}')
+      self.logger.info(f'[AssistantService] Consulta clima: {user_question}')
       try: 
          proccessed_cuestion = self.cleaner_agent.query_preprocessing(
             user_question, 
@@ -35,7 +35,9 @@ class AssistantService:
          
          # Primer agente - obtiene los datos del clima
          weather_result = self.weather_agent.agent_executor.invoke(
-            input={"input": proccessed_cuestion['text']},
+            input={
+               "input": proccessed_cuestion['text']
+            },
             handle_parsing_errors=True
          )  
          
@@ -53,7 +55,7 @@ class AssistantService:
          return friendly_response
       
       except Exception as e:
-         self.logger.log_error(f'[AssistantService] Error en consulta clima: {e}')
+         self.logger.error(f'[AssistantService] Error en consulta clima: {e}')
          
          # Usar el intérprete para generar una respuesta amigable al error
          error_context = {
@@ -66,9 +68,11 @@ class AssistantService:
             error_response = self.interpreter_agent.chain.invoke(error_context)
             return error_response
          except Exception as interpreter_error:
-            self.logger.log_error(f'Error adicional en el intérprete: {interpreter_error}')
+            self.logger.error(f'Error adicional en el intérprete: {interpreter_error}')
             # Si incluso el intérprete falla, devolver un mensaje básico
-            return {"response": "Lo siento, no pude procesar tu consulta sobre el clima en este momento."}
+            return {
+               "response": "Lo siento, no pude procesar tu consulta sobre el clima en este momento."
+            }
             
    def query_financial(self, user_question):
       """
@@ -81,7 +85,7 @@ class AssistantService:
       Returns:
          dict: The response from the financial agent.
       """
-      self.logger.log(f'[AssistantService] Consulta datos financieros: {user_question}')
+      self.logger.info(f'[AssistantService] Consulta datos financieros: {user_question}')
       try:
          proccessed_cuestion = self.cleaner_agent.query_preprocessing(
             user_question, 
@@ -107,7 +111,7 @@ class AssistantService:
          )
          return friendly_response   
       except Exception as e:
-         self.logger.log_error(f'[AssistantService] Error en consulta financiera: {e}')
+         self.logger.error(f'[AssistantService] Error en consulta financiera: {e}')
          
          # Usar el intérprete para generar una respuesta amigable al error
          error_context = {
@@ -123,9 +127,11 @@ class AssistantService:
             )
             return error_response
          except Exception as interpreter_error:
-            self.logger.log_error(f'Error adicional en el intérprete: {interpreter_error}')
+            self.logger.error(f'Error adicional en el intérprete: {interpreter_error}')
             # Si incluso el intérprete falla, devolver un mensaje básico
-            return {"response": "Lo siento, no pude procesar tu consulta sobre información financiera en este momento."}
+            return {
+               "response": "Lo siento, no pude procesar tu consulta sobre información financiera en este momento."
+            }
    
    def query_notice(self, user_question):
       """
@@ -138,7 +144,7 @@ class AssistantService:
       Returns:
          dict: The response from the notice agent.
       """
-      self.logger.log(f'[AssistantService] consulta noticias: {user_question}')
+      self.logger.info(f'[AssistantService] consulta noticias: {user_question}')
       try:
          proccessed_cuestion = self.cleaner_agent.query_preprocessing(
             user_question, 
@@ -156,8 +162,10 @@ class AssistantService:
          )
          return friendly_response
       except Exception as e:
-         self.logger.log_error(f'[AssistantService] Error en consulta noticias: {e}')
-         return {"response": "Lo siento, no pude procesar tu consulta sobre noticias en estFe momento."}
+         self.logger.error(f'[AssistantService] Error en consulta noticias: {e}')
+         return {
+            "response": "Lo siento, no pude procesar tu consulta sobre noticias en estFe momento."
+         }
          
    def query_interpreter(self, user_question):
       """
@@ -180,6 +188,8 @@ class AssistantService:
          )
          return friendly_response
       except Exception as e:
-         self.logger.log_error(f'[AssistantService] Error en consulta intérprete: {e}')
-         return {"response": "Lo siento, no pude procesar tu consulta en este momento."}
+         self.logger.error(f'[AssistantService] Error en consulta intérprete: {e}')
+         return {
+            "response": "Lo siento, no pude procesar tu consulta en este momento."
+         }
    
