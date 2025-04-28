@@ -9,3 +9,9 @@ services:
       - "28000:8080"
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    networks:
+      - redes_pulentas
+
+networks:
+  redes_pulentas:
+    external: true
