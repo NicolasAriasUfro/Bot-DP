@@ -1,14 +1,19 @@
 services:
-  backend:
+  backend.proyect_direction.local:
+    container_name: backend.proyect_direction.local
     build:
         context: .
         dockerfile: build/Dockerfile
-    container_name: "backend_python"
     ports:
       - "8888:8080"
     env_file:
       - .env
-    
+    networks:
+      - redes_pulentas
     volumes:
       - .:/app
+
+networks:
+  redes_pulentas:
+    external: true
 

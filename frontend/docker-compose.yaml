@@ -1,11 +1,17 @@
 version: "3.9"
 
 services:
-    front.proyect_direction.local:
-        container_name: front.proyect_direction.local
-        build:
-          context: .
-          dockerfile: build/Dockerfile
-        image: front.proyect_direction.local
-        ports:
-            - 14000:8080
+  front.proyect_direction.local:
+    container_name: front.proyect_direction.local
+    build:
+      context: .
+      dockerfile: build/Dockerfile
+    image: front.proyect_direction.local
+    ports:
+        - 14000:8080
+    networks:
+        - redes_pulentas
+
+networks:
+  redes_pulentas:
+    external: true
