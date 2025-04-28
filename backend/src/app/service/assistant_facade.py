@@ -16,7 +16,7 @@ class AssistantServiceFacade:
       
       Classifies user query into one of several categories using zero-shot classification.
       
-      Args:
+      Params:
          query (str): The user's input query
          
       Returns:
@@ -36,7 +36,7 @@ class AssistantServiceFacade:
       
       Determines the flow of the assistant based on the classified query.
       
-      Args:
+      Params:
          query (str): The user's input query
          
       Returns:

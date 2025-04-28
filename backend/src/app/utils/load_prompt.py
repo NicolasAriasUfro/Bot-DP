@@ -1,11 +1,14 @@
 
 def load_prompt_from_file(file_path):
    """
+   Load Prompt from File
+   ---------------------
+   
    Load a prompt template from a file.
    This function reads the contents of a file and returns it as a string.
    If the file is not found, it raises a FileNotFoundError.
    
-   Args:
+   Params:
       file_path (str): The path to the file containing the prompt template.
       
    Returns:

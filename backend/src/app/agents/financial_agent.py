@@ -36,7 +36,7 @@ class FinancialAgent:
       Example:
          get_indicator(uf)
       
-      Params  
+      Params: 
          indicator (str): The indicator to fetch.
       Returns:
          dict: The data for the indicator.
