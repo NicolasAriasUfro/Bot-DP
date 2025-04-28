@@ -1,0 +1,11 @@
+
+services:
+  reverse-proxy.proyect_direction.local:
+    container_name: reverse-proxy.proyect_direction.local
+    build:
+      context: .
+      dockerfile: build/Dockerfile
+    ports:
+      - "28000:8080"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
